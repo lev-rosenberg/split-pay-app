@@ -1,0 +1,28 @@
+.profile-wrapper {
+   margin-left: 500px;
+   margin-top: 30px;
+}
+
+.edit{
+    margin-left: 750px;
+    margin-top: 50px;
+}
+.log-out {
+    margin-top: 10px;
+    margin-left: 170px;
+    padding: 15px;
+}
+.column {
+    display: flex;
+    flex-direction: column; 
+    margin-top: 30px;
+}
+
+.column span {
+    width: 500px;
+    height: 25px;
+    background-color: rgb(225, 223, 223);
+    margin-bottom: 15px;
+    padding-left: 15px;
+    padding-top: 15px;
+}

@@ -1,0 +1,25 @@
+.home-container {
+    margin-top: 70px;
+    margin-left: 500px;
+    width: 300px;
+}
+
+.home-container h1 {
+    border-bottom: 3px solid black;
+    width: 400px;
+    font-weight: 350;
+}
+
+.input-container {
+    display: flex; 
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+button {
+    margin-top: 300px;
+    margin-left: 100px;
+    background-color: rgb(176, 244, 176);
+    padding: 10px;
+    border-radius: 3px;
+}
