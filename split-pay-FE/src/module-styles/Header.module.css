@@ -1,0 +1,10 @@
+.header-container {
+    background-color: rgba(155, 159, 163, 0.658); 
+    width: 100%;
+    position: fixed;
+    top: 0px; 
+    text-align: center; 
+}
+.header-container h3 {
+    font-weight: 450;
+}
