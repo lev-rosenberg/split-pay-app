@@ -29,7 +29,7 @@ const HomePage = () => {
             {groupName.length > 0 && <button type="button" onClick={handleCreateGroup}>Create Group</button>}
             {isCreated && (
                 <Dialog className={styles["dialog"]} open={isCreated} onClose={() => setIsCreated(false)}>
-                    <DialogContent>Share Group Join Link: <span>{groupLink}</span></DialogContent>
+                    <DialogContent>Share Group Join Link: <br></br><span>{groupLink}</span></DialogContent>
                     <DialogActions>
                         <IconButton aria-label="copy link" onClick={() => handleCopyLink(groupLink)}>
                             <ContentCopyIcon /> 

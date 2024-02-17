@@ -1,0 +1,45 @@
+.payment-page-container {
+    margin-top: 100px;
+    margin-left: 500px;
+}
+.payment-page-container h3 {
+    font-weight: 450;
+    font-size: 30px;
+    border-bottom: 3px solid black;
+    width: 500px;
+}
+.payment-page-container button {
+    background-color: lightgreen; 
+    margin-top: 20px;
+    margin-left: 180px;
+    border-radius: 20%;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.payment-page-container button:hover {
+    background-color: lightblue;
+}
+.single-input {
+    margin-top: 20px;
+}
+.single-input label{
+    font-weight: 400;
+    margin-right: 15px;
+}
+.form-control {
+    margin-left: 50px;
+    width: 200px;
+}
+.owed {
+    display: flex;
+    flex-direction: column;
+}
+.owed-item {
+    display: flex; 
+    align-items: center;
+}
+.owed-item span {
+    margin-right: 15px;
+}
