@@ -1,0 +1,30 @@
+.groups-container {
+    margin-top: 75px;
+    margin-left: 500px;
+    width: 500px;
+}
+
+.groups-container h1 {
+    font-weight: 450;
+    border-bottom: 3px solid black;
+}
+
+.groups-container h5 {
+    font-weight: 400;
+    font-size: large;
+}
+
+.groups-container button {
+    width: 300px;
+    height: 50px;
+    background-color: rgba(155, 159, 163, 0.658); 
+}
+.groups-container button:hover {
+    background-color: lightblue;
+}
+.current-group button {
+    margin-top: 15px;
+}
+.all-groups button {
+    margin-top: 15px;
+}
