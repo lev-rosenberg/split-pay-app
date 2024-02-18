@@ -19,7 +19,7 @@ const GroupsPage = () => {
             </div>
             <div className={styles["all-groups"]}>
                 <h5>All Groups:</h5>
-                {allGroups.map(ag => <button type="button" onClick={() => handleInitiatePaymentSplit(ag)}>{ag}</button>)}
+                {allGroups.map((ag, idx) => <button key = {idx} type="button" onClick={() => handleInitiatePaymentSplit(ag)}>{ag}</button>)}
             </div>
         </div>
     ); 

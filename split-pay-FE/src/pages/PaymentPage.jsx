@@ -31,7 +31,7 @@ const PaymentPage = () => {
     }
     const handlePaymentStart = () => {
         //transition over to see real-time status updates for each member of group! 
-        navigate("/status"); 
+        navigate("/status", {state: {groupMembers}}); 
     }
     return (
         <div className={styles["payment-page-container"]}>
@@ -61,6 +61,7 @@ const PaymentPage = () => {
                     </Select>
                 </FormControl>                 
             </div>
+            <h4>Amount Owed:</h4>
             {formFields["strategy"] === "equal" && (
                 <div className={styles["owed"]}>
                     {groupMembers.map((gm, idx) => {

@@ -1,0 +1,8 @@
+.member-status-wrapper {
+    display: flex;
+    flex-direction: row; 
+    align-items: center;
+}
+.member-status-wrapper p {
+    margin-left: 80px;
+}

@@ -1,0 +1,38 @@
+.status-wrapper {
+    margin-left: 500px;
+    margin-top: 75px;
+    display: flex;
+    flex-direction: column; 
+}
+
+.status-wrapper h3 {
+    font-weight: 400; 
+    font-size: 30px;
+    border-bottom: 3px solid black; 
+    width: 275px;
+}
+.status-wrapper span {
+    margin-left: 200px;
+}
+.status-wrapper button {
+    margin-top: 10px;
+    margin-right: 50px;
+    width: 100px;
+    height: 50px;
+    border-radius: 25%;
+}
+.members-status{
+    border-bottom: 3px solid black; 
+    width: 500px;
+}
+.total-owed {
+    display: flex;
+    flex-direction: row; 
+    align-items: center; 
+}
+.total-owed p {
+    margin-right: 10px; 
+}
+.total-owed span {
+    margin-left: 120px;
+}
