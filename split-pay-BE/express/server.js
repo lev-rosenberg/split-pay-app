@@ -39,7 +39,7 @@ pool.query(`CREATE TABLE GroupMembers(
 /*
 Route Name Conventions we will need to handle(REST paradigm APIs; using resource names):
 1)/users/
-  a.For POST a new user.
+  a.For POST a new user. (Done)
 2)/users/{userID}
   a.Route for updating fields of user with userID = route param! 
 3)/groups/

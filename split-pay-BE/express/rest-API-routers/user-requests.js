@@ -10,15 +10,21 @@ router.post('/', (req, res) => {
   const values = [userID, isLeader, hasAcceptedTerms, amountOwed, userName, email]
   pool.query(query,
               values, 
-              (err, res) => {
+              (err, result) => {
       if(err){
           console.log(`error message users: ${err.message}`); 
+          res.status(400).send(err.message); 
       }
       else{
-          console.log(`res: ${res}`); 
+          const getNewInsertedQuery = `SELECT * FROM Users WHERE userID = $1`
+          pool.query(getNewInsertedQuery, [userID]).then(result => {
+            console.log(result);
+            res.status(201).send(result.rows[0]);
+          }).catch(err => {
+            res.status(400).send("Can't add a new user!"); 
+          });
       }
   }); 
-  res.status(201).send('POST Request!')
 });
 
 router.get('/:id', (req, res) => {
@@ -28,9 +34,13 @@ router.get('/:id', (req, res) => {
     pool.query(getQuery, [userID], (err, response) => {
         if(err){
             console.log("error message users: " + err.message); 
+            res.status(400).send("Bad request to get a user!"); 
         } else{
             console.log(`res: \n`); 
-            console.log(response.rows); 
+            console.log(response.rows[0]); 
+            if(!response.rows.length){
+                res.status(404).send(`User with id: ${userID} not found!`); 
+            }
             res.status(200).send(response.rows[0])
         }
     })
