@@ -1,6 +1,8 @@
 const express = require('express'); 
 const pool = require('./pool.js');
-const userRouter = require('./rest-API-routers/user-requests.js'); 
+const usersRouter = require('./rest-API-routers/user-requests.js'); 
+const groupsRouter = require('./rest-API-routers/group-requests.js')
+const groupMembersRouter= require('./rest-API-routers/group-members-requests.js');
 const app = express(); 
 const port = 8000
 /*
@@ -15,26 +17,25 @@ const pool = new Pool({
 
 app.use(express.json());
 //let userRouter defined handler methods handle all API requests coming to '/users'!
-app.use('/users', userRouter); 
+app.use('/users', usersRouter); 
+app.use('/groups', groupsRouter); 
+app.use('/groupMembers', groupMembersRouter); 
 
-// pool.query(`CREATE TABLE Users(
-//     userID TEXT PRIMARY KEY NOT NULL,
-//     isLeader BOOLEAN NOT NULL,
-//     hasAcceptedTerms BOOLEAN NOT NULL,
-//     amountOwed FLOAT,
-//     userName TEXT,
-//     email TEXT,
-//     groupID TEXT,
-//     FOREIGN KEY (groupID) REFERENCES Groups(groupID)
-// )`, (err, res) => {
-//     if(err) {
-//         console.log(`error: ${err}`); 
-//     }
-//     else{
-//         console.log('created users table'); 
-//     }
-// }); 
-
+/*
+pool.query(`CREATE TABLE GroupMembers(
+  groupID TEXT,
+  memberID TEXT,
+  FOREIGN KEY (groupID) REFERENCES Groups(groupID),
+  FOREIGN KEY (memberID) REFERENCES Users(userID)
+)`, (err, res) => {
+    if(err) {
+        console.log(`error: ${err}`); 
+    }
+    else{
+        console.log('created users table'); 
+    }
+}); 
+*/
 /*
 Route Name Conventions we will need to handle(REST paradigm APIs; using resource names):
 1)/users/
