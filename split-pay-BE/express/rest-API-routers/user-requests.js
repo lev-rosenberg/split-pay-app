@@ -41,7 +41,7 @@ router.get('/:id', (req, res) => {
             console.log(response.rows[0]); 
             if(!response.rows.length){
                 res.status(404).send(`User with id: ${userID} not found!`); 
-            }
+            } 
             res.status(200).send(response.rows[0])
         }
     });

@@ -74,7 +74,7 @@ router.delete('/:id', (req, res) => {
                 res.status(200).send(updatedGroup);
             }).catch(err => {
                 console.log(err.message); 
-            }); 
+            });  
         }
     });
 });

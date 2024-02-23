@@ -4,7 +4,7 @@ const pool = require('../pool.js')
 
 // groupId: "testId" memberId: "lev"
 router.post('/', (req,res) => {
-    const body = req.body;
+    const body = req.body; 
     const {groupID, memberID} = body
     const insertGroupMemberQuery = `INSERT INTO GroupMembers(groupid, memberid) VALUES($1, $2)`
     pool.query(insertGroupMemberQuery, [groupID, memberID], (err, resp) => {
