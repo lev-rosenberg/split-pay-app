@@ -17,4 +17,33 @@ router.post('/', (req,res) => {
     }); 
 }); 
 
+
+router.get('/:id', (req, res) => {
+    const groupID = req.params.id; 
+    const getGroupMembersQuery = `SELECT * FROM GroupMembers WHERE groupid = $1`
+    pool.query(getGroupMembersQuery, [groupID], (err, result) => {
+        if (err) {
+            console.log(err.message); 
+            res.status(400).send('Error getting group members');
+        } else {
+            console.log(`get res: ${result}`); 
+            res.status(200).send(result.rows)
+        }
+    }); 
+});
+
+router.delete('/:id', (req, res) => {
+  const groupID = req.params.id;
+  const deleteQuery = `DELETE FROM GroupMembers WHERE groupid = $1`;
+  pool.query(deleteQuery, [groupID], (err, result) => {
+      if (err) {
+          console.log(err.message);
+          res.status(400).send('Error deleting group members');
+      } else {
+          console.log(`delete res: ${result}`);
+          res.status(200).json({ message: 'Group members deleted successfully' });
+      }
+  });
+});
+
 module.exports = router; 

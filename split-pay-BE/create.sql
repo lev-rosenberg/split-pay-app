@@ -19,8 +19,8 @@ CREATE TABLE Groups(
 );
 
 CREATE TABLE GroupMembers(
-  groupID TEXT,
-  memberID TEXT,
+  groupID TEXT NOT NULL,
+  memberID TEXT NOT NULL,
   FOREIGN KEY (groupID) REFERENCES Groups(groupID),
   FOREIGN KEY (memberID) REFERENCES Users(userID)
 );

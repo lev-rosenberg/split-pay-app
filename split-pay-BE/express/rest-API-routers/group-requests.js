@@ -11,13 +11,13 @@ router.post('/', (req, res) => {
   const values = [groupID, leaderID, groupName, hasEveryoneAcceptedTerms, totalOwed]
   pool.query(query,
               values, 
-              (err, resp) => {
+              (err, result) => {
       if(err){
           console.log(`error message groups: ${err.message}`); 
           res.status(400).send("Couldn't add a new group!"); 
       }
       else {
-          console.log(`resp: ${resp}`); 
+          console.log(`result: ${result}`); 
           res.status(201).send("Post success!");
       }
   }); 
@@ -43,7 +43,7 @@ router.get('/:id', (req, res) => {
 router.put('/:id', (req, res) => {
     const groupID = req.params.id;
     const body = req.body;
-    const {leaderID, groupName, hasEveryoneAccepted, totalOwed} = body; 
+    const {leaderID, groupName, hasEveryoneAcceptedTerms, totalOwed} = body; 
     const putGroupQuery = `UPDATE Groups
                            SET leaderID = $2, groupName=$3, hasEveryoneAcceptedTerms=$4, totalOwed=$5
                            WHERE groupID = $1`;
@@ -51,6 +51,21 @@ router.put('/:id', (req, res) => {
     pool.query(putGroupQuery, values, (err, result) => {
         if (err) {
             console.log(err.message);
+            res.status(400).send('Error updating group');
+        } else {
+            console.log(`put res: ${result}`);
+            res.status(200).json({ message: 'Group updated successfully' });
+        }
+    });
+});
+
+router.delete('/:id', (req, res) => {
+    const groupID = req.params.id;
+    const deleteGroupQuery = `DELETE FROM Groups WHERE groupID = $1`;
+    pool.query(deleteGroupQuery, [groupID], (err, response) => {
+        if (err) {
+            console.log(err.message);
+            res.status(400).send('Error deleting group');
         } else {
             const getUpdatedUserQuery = `SELECT * FROM Groups WHERE groupID = $1`;
             pool.query(getUpdatedUserQuery, [groupID]).then(result => {
