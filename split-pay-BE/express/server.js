@@ -1,57 +1,41 @@
 const express = require('express'); 
-const {Pool} = require('pg'); 
+const pool = require('./pool.js');
+const usersRouter = require('./rest-API-routers/user-requests.js'); 
+const groupsRouter = require('./rest-API-routers/group-requests.js')
+const groupMembersRouter= require('./rest-API-routers/group-members-requests.js');
 const app = express(); 
 const port = 8000
-
+/*
 //conn pool object for config!
 const pool = new Pool({
     user: "postgres",
     host: 'final-project-396.czauaqw2uc55.us-east-2.rds.amazonaws.com',
-    database: 'postgres', //this is the initial db identifier
+    database: 'postgres',
     password: "cs396-sjl",
     port: 5432
-});
+});*/
 
 app.use(express.json());
+//let userRouter defined handler methods handle all API requests coming to '/users'!
+app.use('/users', usersRouter); 
+app.use('/groups', groupsRouter); 
+app.use('/groupMembers', groupMembersRouter); 
 
-pool.query(`CREATE TABLE Groups(
-  groupID TEXT PRIMARY KEY NOT NULL,
-  leaderID TEXT,
-  groupName TEXT,
-  hasEveryoneAcceptedTerms BOOLEAN,
-  totalOwed FLOAT
-);`, (err, res) => {
-    if(err){
+/*
+pool.query(`CREATE TABLE GroupMembers(
+  groupID TEXT,
+  memberID TEXT,
+  FOREIGN KEY (groupID) REFERENCES Groups(groupID),
+  FOREIGN KEY (memberID) REFERENCES Users(userID)
+)`, (err, res) => {
+    if(err) {
         console.log(`error: ${err}`); 
     }
     else{
         console.log('created users table'); 
     }
 }); 
-
-app.post('/', (req, res) => {
-    //parse request body! 
-    const body = req.body; 
-    const {userID, isLeader, hasAcceptedTerms, amountOwed, userName, email} = body; 
-    const insertQuery =
-     `INSERT INTO Users(userID, isLeader, hasAcceptedTerms, amountOwed, userName, email) VALUES(
-        ${userID}, ${isLeader}, ${hasAcceptedTerms}, ${amountOwed}, ${userName}, ${email}
-      )`;
-    const query = 'INSERT INTO Users(userID, isLeader, hasAcceptedTerms, amountOwed, userName, email) VALUES ($1, $2, $3, $4, $5, $6)'
-    const values = [userID, isLeader, hasAcceptedTerms, amountOwed, userName, email]
-    pool.query(query,
-                values, 
-                (err, res) => {
-        if(err){
-            console.log(`error message: ${err.message}`); 
-        }
-        else{
-            console.log(`res: ${res}`); 
-        }
-    }); 
-    res.send('POST Request!')
-})
-
+*/
 /*
 Route Name Conventions we will need to handle(REST paradigm APIs; using resource names):
 1)/users/
@@ -66,7 +50,7 @@ a.DELETE request to identify specific group to delete! */
 Requests we will need to handle:
 use case: group leader creates a new group
   - POST request to add group to the Groups table
-
+/users/
 use case: when a user clicks on link?
   - POST request to add a user to the database (if they aren't in it already) or PUT request to update their info (ie new group ID, new amount owed, etc.)
 

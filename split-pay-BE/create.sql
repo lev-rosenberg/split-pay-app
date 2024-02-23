@@ -18,9 +18,9 @@ CREATE TABLE Groups(
     totalOwed FLOAT
 );
 
--- CREATE TABLE GroupMembers(
---   groupID TEXT,
---   memberID TEXT,
---   FOREIGN KEY (groupID) REFERENCES Groups(groupID),
---   FOREIGN KEY (memberID) REFERENCES Users(userID)
--- );
+CREATE TABLE GroupMembers(
+  groupID TEXT,
+  memberID TEXT,
+  FOREIGN KEY (groupID) REFERENCES Groups(groupID),
+  FOREIGN KEY (memberID) REFERENCES Users(userID)
+);
