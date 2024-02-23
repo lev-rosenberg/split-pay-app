@@ -7,21 +7,20 @@ const port = 8000
 const pool = new Pool({
     user: "postgres",
     host: 'final-project-396.czauaqw2uc55.us-east-2.rds.amazonaws.com',
-    database: 'final-project-396',
+    database: 'postgres', //this is the initial db identifier
     password: "cs396-sjl",
     port: 5432
 });
 
 app.use(express.json());
 
-pool.query(`CREATE TABLE Users(
-    userID TEXT PRIMARY KEY NOT NULL,
-    isLeader BOOLEAN NOT NULL,
-    hasAcceptedTerms BOOLEAN NOT NULL,
-    amountOwed FLOAT,
-    userName TEXT,
-    email TEXT
-)`, (err, res) => {
+pool.query(`CREATE TABLE Groups(
+  groupID TEXT PRIMARY KEY NOT NULL,
+  leaderID TEXT,
+  groupName TEXT,
+  hasEveryoneAcceptedTerms BOOLEAN,
+  totalOwed FLOAT
+);`, (err, res) => {
     if(err){
         console.log(`error: ${err}`); 
     }
