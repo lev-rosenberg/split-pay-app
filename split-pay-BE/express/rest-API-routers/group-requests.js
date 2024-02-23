@@ -14,11 +14,16 @@ router.post('/', (req, res) => {
               (err, result) => {
       if(err){
           console.log(`error message groups: ${err.message}`); 
-          res.status(400).send("Couldn't add a new group!"); 
+          res.status(400).json({error: err.message}); 
       }
       else {
-          console.log(`result: ${result}`); 
-          res.status(201).send("Post success!");
+          const getNewInsertedGroupQuery = `SELECT * FROM Groups WHERE groupID = $1`
+          pool.query(getNewInsertedGroupQuery, [groupID]).then(result => {
+            const newInsertedGroup = result.rows[0];
+            res.status(201).json({message: "Succesfully added new group!", newGroup: newInsertedGroup}); 
+          }).catch(err => {
+            res.status(404).json({message: "Can't find the newly inserted group!"}); 
+          })
       }
   }); 
 });
@@ -29,54 +34,40 @@ router.get('/:id', (req, res) => {
     pool.query(getGroupQuery, [groupID], (err, result) => {
         if(err){
             console.log(err.message); 
-            res.status(400).send("Bad request to get a group by client!"); 
+            res.status(400).json({error: err.message}); 
         } else {
             console.log(`res: ${result.rows[0]}`); 
             if(!result.rows[0]){
-                res.status(404).send(`No group with id: ${groupID} found!`); 
+                res.status(404).json({error: `No group with id: ${groupID} found!`}); 
             }
-            res.status(200).send(result.rows[0])
+            res.status(200).json({message: "Succesfully got group!", group: result.rows[0]})
         }
     }); 
 });
 
 router.put('/:id', (req, res) => {
+    //get groupID route parameter from url! 
     const groupID = req.params.id;
     const body = req.body;
+    //destructure from request body the updated field values! 
     const {leaderID, groupName, hasEveryoneAcceptedTerms, totalOwed} = body; 
     const putGroupQuery = `UPDATE Groups
                            SET leaderID = $2, groupName=$3, hasEveryoneAcceptedTerms=$4, totalOwed=$5
                            WHERE groupID = $1`;
-    const values = [groupID, leaderID, groupName, hasEveryoneAccepted, totalOwed];
-    pool.query(putGroupQuery, values, (err, result) => {
-        if (err) {
-            console.log(err.message);
-            res.status(400).send('Error updating group');
-        } else {
-            console.log(`put res: ${result}`);
-            res.status(200).json({ message: 'Group updated successfully' });
+    const selectQuery = `SELECT * FROM Groups WHERE groupID = $1`; 
+    const values = [groupID, leaderID, groupName, hasEveryoneAcceptedTerms, totalOwed];
+    pool.query(selectQuery, [groupID]).then((result) => {
+        if(result.rows.length){
+            pool.query(putGroupQuery, values).then( _ => {
+                pool.query(selectQuery, [groupID]).then(result => {
+                    res.status(200).json({message: "Updated group successfully!", newGroup: result.rows[0]})
+                }).catch(err => res.status(400).json({error: err.message})); 
+        }).catch(err => res.status(400).json({error: err.message})); 
+        } else{
+            res.status(404).json({error: "Can't find group to update!"}); 
         }
-    });
-});
-
-router.delete('/:id', (req, res) => {
-    const groupID = req.params.id;
-    const deleteGroupQuery = `DELETE FROM Groups WHERE groupID = $1`;
-    pool.query(deleteGroupQuery, [groupID], (err, response) => {
-        if (err) {
-            console.log(err.message);
-            res.status(400).send('Error deleting group');
-        } else {
-            const getUpdatedUserQuery = `SELECT * FROM Groups WHERE groupID = $1`;
-            pool.query(getUpdatedUserQuery, [groupID]).then(result => {
-                const updatedGroup = result.rows[0]
-                console.log(updatedGroup);
-                res.status(200).send(updatedGroup);
-            }).catch(err => {
-                console.log(err.message); 
-            });  
-        }
-    });
+    }).catch(err => res.status(400).json({error: err.message})); 
+    
 });
 
 router.delete('/:id', (req , res) => {
@@ -85,18 +76,20 @@ router.delete('/:id', (req , res) => {
     const selectQuery = `SELECT * FROM Groups WHERE groupid = $1`
     pool.query(selectQuery, groupID).then((result) => {
         const deletedObj = result.rows[0];
+        if(!result.rows.length){
+            res.status(404).json({message: "Can not find group with matching group ID to delete!"}); 
+            return; 
+        }
         const deleteQuery = `DELETE FROM Groups WHERE groupid = $1`
         pool.query(deleteQuery, groupID).then((result) => {
-            console.log(`deleted group with id: ${groupID}\n`);
-            console.log(deletedObj); 
-            res.status(200).send(deletedObj); 
+            res.status(200).json({message: "Deleted the group successfully!", deletedGroup: deletedObj}); 
         }).catch(err => {
             console.log(err.message)
-            res.status(400).send("Can't delete!")
+            res.status(400).json({message: "Can't delete the group!"}); 
         }); 
     }).catch(err => {
         console.log(err.message)
-        res.status(404).send("Can't find group to delete!"); 
+        res.status(404).send(err.message); 
     }); 
 }); 
 
