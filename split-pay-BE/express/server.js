@@ -1,57 +1,39 @@
 const express = require('express'); 
-const {Pool} = require('pg'); 
+const pool = require('./pool.js');
+const userRouter = require('./rest-API-routers/user-requests.js'); 
 const app = express(); 
 const port = 8000
-
+/*
 //conn pool object for config!
 const pool = new Pool({
     user: "postgres",
     host: 'final-project-396.czauaqw2uc55.us-east-2.rds.amazonaws.com',
-    database: 'final-project-396',
+    database: 'postgres',
     password: "cs396-sjl",
     port: 5432
-});
+});*/
 
 app.use(express.json());
+//let userRouter defined handler methods handle all API requests coming to '/users'!
+app.use('/users', userRouter); 
 
-pool.query(`CREATE TABLE Users(
-    userID TEXT PRIMARY KEY NOT NULL,
-    isLeader BOOLEAN NOT NULL,
-    hasAcceptedTerms BOOLEAN NOT NULL,
-    amountOwed FLOAT,
-    userName TEXT,
-    email TEXT
-)`, (err, res) => {
-    if(err){
-        console.log(`error: ${err}`); 
-    }
-    else{
-        console.log('created users table'); 
-    }
-}); 
-
-app.post('/', (req, res) => {
-    //parse request body! 
-    const body = req.body; 
-    const {userID, isLeader, hasAcceptedTerms, amountOwed, userName, email} = body; 
-    const insertQuery =
-     `INSERT INTO Users(userID, isLeader, hasAcceptedTerms, amountOwed, userName, email) VALUES(
-        ${userID}, ${isLeader}, ${hasAcceptedTerms}, ${amountOwed}, ${userName}, ${email}
-      )`;
-    const query = 'INSERT INTO Users(userID, isLeader, hasAcceptedTerms, amountOwed, userName, email) VALUES ($1, $2, $3, $4, $5, $6)'
-    const values = [userID, isLeader, hasAcceptedTerms, amountOwed, userName, email]
-    pool.query(query,
-                values, 
-                (err, res) => {
-        if(err){
-            console.log(`error message: ${err.message}`); 
-        }
-        else{
-            console.log(`res: ${res}`); 
-        }
-    }); 
-    res.send('POST Request!')
-})
+// pool.query(`CREATE TABLE Users(
+//     userID TEXT PRIMARY KEY NOT NULL,
+//     isLeader BOOLEAN NOT NULL,
+//     hasAcceptedTerms BOOLEAN NOT NULL,
+//     amountOwed FLOAT,
+//     userName TEXT,
+//     email TEXT,
+//     groupID TEXT,
+//     FOREIGN KEY (groupID) REFERENCES Groups(groupID)
+// )`, (err, res) => {
+//     if(err) {
+//         console.log(`error: ${err}`); 
+//     }
+//     else{
+//         console.log('created users table'); 
+//     }
+// }); 
 
 /*
 Route Name Conventions we will need to handle(REST paradigm APIs; using resource names):
@@ -67,7 +49,7 @@ a.DELETE request to identify specific group to delete! */
 Requests we will need to handle:
 use case: group leader creates a new group
   - POST request to add group to the Groups table
-
+/users/
 use case: when a user clicks on link?
   - POST request to add a user to the database (if they aren't in it already) or PUT request to update their info (ie new group ID, new amount owed, etc.)
 
