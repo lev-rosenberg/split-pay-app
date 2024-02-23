@@ -10,6 +10,7 @@ router.post('/', (req,res) => {
     pool.query(insertGroupMemberQuery, [groupID, memberID], (err, resp) => {
         if(err){
             console.log(`error for inserting a new groupMember: ${err.message}`)
+            res.status(400).json({error: err.message}); 
         } else{
             console.log("inserted new group member success!")
             res.status(201).send(resp.rows[0]); 
