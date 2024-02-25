@@ -37,25 +37,29 @@ const PaymentPage = () => {
         <div className={styles["payment-page-container"]}>
             <h3>Payment For {groupName}</h3>
             <div className={styles["single-input"]}>
-                <label htmlFor="bill-amount">Total Bill Amount: </label>
                 <FormControl className={styles["form-control"]}>
                     <InputLabel htmlFor="bill-amount">Amount</InputLabel>
-                    <OutlinedInput  id="bill-amount" 
-                                    label="bill-amount" 
-                                    defaultValue="150"
-                                    startAdornment={<InputAdornment position={"start"}>$</InputAdornment>}
-                                    inputProps={{
-                                        type: "text",
-                                        pattern: '[0-9]*\\.?[0-9]*'
-                                    }}
-                                    onChange={(e) => updateFormFields("amount", e)}></OutlinedInput>
+                    <OutlinedInput  
+                      id="bill-amount" 
+                      label="bill-amount" 
+                      defaultValue="150"
+                      startAdornment={<InputAdornment position={"start"}>$</InputAdornment>}
+                      inputProps={{
+                          type: "text",
+                          pattern: '[0-9]*\\.?[0-9]*'
+                      }}
+                      onChange={(e) => updateFormFields("amount", e)}/>
                 </FormControl>
             </div>
             <div className={styles["single-input"]}>
-                <label htmlFor="split">Strategy of Splitting:</label>   
                 <FormControl className={styles["form-control"]} >
                     <InputLabel id="split">Split-Strategy</InputLabel>
-                    <Select labelId="split" id="split-strategy" value={formFields["strategy"]} onChange={(e) => updateFormFields("strategy", e)}>
+                    <Select 
+                      labelId="split" 
+                      id="split-strategy" 
+                      value={formFields["strategy"]} 
+                      
+                      onChange={(e) => updateFormFields("strategy", e)}>
                         <MenuItem value={"equal"}>Equal</MenuItem>
                         <MenuItem value={"custom"}>Custom</MenuItem>
                     </Select>
@@ -73,9 +77,8 @@ const PaymentPage = () => {
                 </div>
             )}
             <div className={styles["single-input"]}>
-                <label htmlFor="alert">Alert Everyone to Group:</label>
                 <FormControl className={styles["form-control"]}>
-                    <FormLabel>Alert-Everyone?</FormLabel>
+                    <FormLabel>Alert Everyone in the Group?</FormLabel>
                     <RadioGroup defaultValue="Yes" name="alert-everyone-group" onChange={(e) => updateFormFields("alert", e)}>
                         <Radio value="Yes" label="Yes" variant="solid"/> 
                         <Radio value="No" label = "No" variant="solid"/> 

@@ -1,10 +1,9 @@
 .header-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
     background-color: rgba(155, 159, 163, 0.658); 
     width: 100%;
-    position: fixed;
-    top: 0px; 
-    text-align: center; 
-}
-.header-container h3 {
-    font-weight: 450;
+    height: 10vh;
 }

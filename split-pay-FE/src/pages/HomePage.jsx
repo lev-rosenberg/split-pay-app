@@ -9,6 +9,7 @@ const HomePage = () => {
     const [groupName, setGroupName] = useState(""); 
     const [isCreated, setIsCreated] = useState(false); 
     const [groupLink, setGroupLink] = useState('')
+    
     const handleCreateGroup = () => {
         setIsCreated(true); 
         setGroupLink('https://unique-link-to-group-page'); 

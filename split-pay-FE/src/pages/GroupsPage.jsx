@@ -13,12 +13,12 @@ const GroupsPage = () => {
     return (
         <div className={styles["groups-container"]}>
             <h1>Your Groups</h1>
+            <h5>Current Group:</h5>
             <div className={styles["current-group"]}>
-                <h5>Current Group:</h5>
                 {curGroups.map(cg => <button type="button" onClick={() => handleInitiatePaymentSplit(cg)}>{cg}</button>)}
             </div>
+            <h5>All Groups:</h5>
             <div className={styles["all-groups"]}>
-                <h5>All Groups:</h5>
                 {allGroups.map((ag, idx) => <button key = {idx} type="button" onClick={() => handleInitiatePaymentSplit(ag)}>{ag}</button>)}
             </div>
         </div>
