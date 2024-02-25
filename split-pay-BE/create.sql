@@ -5,9 +5,7 @@ CREATE TABLE Users(
   hasAcceptedTerms BOOLEAN NOT NULL,
   amountOwed FLOAT,
   userName TEXT,
-  email TEXT
-  groupID TEXT,
-  FOREIGN KEY (groupID) REFERENCES Groups(groupID),
+  email TEXT,
 );
 
 CREATE TABLE Groups(
@@ -15,7 +13,8 @@ CREATE TABLE Groups(
     leaderID TEXT,
     groupName TEXT,
     hasEveryoneAcceptedTerms BOOLEAN,
-    totalOwed FLOAT
+    totalOwed FLOAT,
+    isCurrent BOOLEAN
 );
 
 CREATE TABLE GroupMembers(

@@ -18,6 +18,12 @@ router.post('/', (req,res) => {
     }); 
 }); 
 
+router.get("/", (req, res) => {
+    const getAllGroupsQuery = `SELECT * FROM Groups`;
+    pool.query(getAllGroupsQuery).then(result => {
+        res.status(200).json({message: "Got all Groups!", groups: result.rows}); 
+    }).catch(err => res.status(400).json({error: err.message}));
+}); 
 
 router.get('/:id', (req, res) => {
     const groupID = req.params.id; 

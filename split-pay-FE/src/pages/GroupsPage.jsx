@@ -1,10 +1,20 @@
 import styles from "../module-styles/GroupsPage.module.css"; 
-import {useState} from "react"; 
+import {useState, useEffect} from "react"; 
 import { useNavigate } from "react-router-dom";
+import Axios from "axios";
+
 const GroupsPage = () => {
     const navigate = useNavigate(); 
-    const [curGroups, setCurGroups] = useState(["Group1"]); 
-    const [allGroups, setAllGroups] = useState(["Group1", "Group2", "Awesome Group Name", "Another Group", "Group 4","Group 5"]); 
+    const [curGroups, setCurGroups] = useState([]); 
+    const [allGroups, setAllGroups] = useState([]); 
+    //get all groups from server!
+    useEffect(() => {
+        Axios.get("http://localhost:8000/groups/").then(response => {
+            console.log(response.data.groups); 
+            setAllGroups(response.data.groups.map(g => g.groupname));
+            setCurGroups(response.data.groups.filter(group => group.isCurrent).map(group => group.groupname))
+        }).catch(err => console.log(err.message)); 
+    }, []); 
     //function that is called when button  click happens => initiates payment split for the pertained group! 
     const handleInitiatePaymentSplit = (cg) => {
         //switch route to status to show in real-time status page for this specific group! 

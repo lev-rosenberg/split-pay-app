@@ -1,25 +1,22 @@
 const express = require('express'); 
+const cors = require('cors');
 const pool = require('./pool.js');
 const usersRouter = require('./rest-API-routers/user-requests.js'); 
 const groupsRouter = require('./rest-API-routers/group-requests.js')
 const groupMembersRouter= require('./rest-API-routers/group-members-requests.js');
 const app = express(); 
 const port = 8000
-/*
-//conn pool object for config!
-const pool = new Pool({
-    user: "postgres",
-    host: 'final-project-396.czauaqw2uc55.us-east-2.rds.amazonaws.com',
-    database: 'postgres',
-    password: "cs396-sjl",
-    port: 5432
-});*/
 
 app.use(express.json());
+// app.use(cors())
+app.use(cors({
+  origin: 'http://localhost:3000',
+})); 
 //let userRouter defined handler methods handle all API requests coming to '/users'!
 app.use('/users', usersRouter); 
 app.use('/groups', groupsRouter); 
 app.use('/groupMembers', groupMembersRouter); 
+
 
 /*
 pool.query(`CREATE TABLE GroupMembers(

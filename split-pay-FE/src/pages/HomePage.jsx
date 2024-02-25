@@ -5,12 +5,17 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { v4 as uuidv4 } from 'uuid';
+import Axios from "axios";
 const HomePage = () => {
     const [groupName, setGroupName] = useState(""); 
     const [isCreated, setIsCreated] = useState(false); 
     const [groupLink, setGroupLink] = useState('')
-    
     const handleCreateGroup = () => {
+        const newGroup = {groupName, groupID: uuidv4(), leaderID: "", hasEveryoneAcceptedTerms: false, totalOwed: 0.0, isCurrent: true}
+        Axios.post("http://localhost:8000/groups", newGroup).then(response => {
+            console.log(response); 
+        }).catch(err => console.log(err.message)); 
         setIsCreated(true); 
         setGroupLink('https://unique-link-to-group-page'); 
     }
@@ -41,5 +46,4 @@ const HomePage = () => {
         </div>
     ); 
 }
-
 export default HomePage; 
