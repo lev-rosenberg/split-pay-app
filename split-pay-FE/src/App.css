@@ -35,3 +35,13 @@ main {
   width: 100vw;
   height: 100vh;
 }
+
+
+@media (min-width: 768px) {
+  main {
+    
+      width: 40%;
+      margin: 0 auto;
+      
+  }
+}
