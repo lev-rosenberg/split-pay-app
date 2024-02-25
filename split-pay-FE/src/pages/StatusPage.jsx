@@ -12,8 +12,7 @@ const StatusPage = () => {
                 {groupMembers.map((gm, idx) => <MemberStatus key={idx} memberName={gm}/> )}
             </div>
             <div className={styles["total-owed"]}>
-                <p>Total Owed: </p>
-                <span>${45.57}</span>
+                <p>Total Owed: ${45.57} </p>
             </div>
             <button type="button">Finish Pay</button>
         </div>  

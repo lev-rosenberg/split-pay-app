@@ -2,7 +2,12 @@
     display: flex;
     flex-direction: row; 
     align-items: center;
+    justify-content: space-between;
+}
+
+.member-status-wrapper .left {
+    display: flex;
+    align-items: center;
 }
 .member-status-wrapper p {
-    margin-left: 80px;
 }
