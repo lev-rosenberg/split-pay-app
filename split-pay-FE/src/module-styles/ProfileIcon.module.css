@@ -1,10 +1,8 @@
 .profile-icon-container {
-    border: 3px solid black;
     border-radius: 25%; 
     background-color: rgb(240, 238, 238);
     width: 150px;
     height: 150px;
-    margin-left: 120px;
 }
 
 .react-icon {
