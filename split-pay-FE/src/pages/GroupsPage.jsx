@@ -18,7 +18,7 @@ const GroupsPage = () => {
             console.log("gm", gm);
             Axios.get(`http://localhost:8000/groups/${gm.groupid}`).then(response => {
               console.log("group", response.data);
-              if (response.data.isCurrent) {
+              if (response.data.group.isCurrent) {
                 setCurGroups([...curGroups, response.data.group.groupname]);
               }
               setAllGroups([...allGroups, response.data.group.groupname]);

@@ -18,7 +18,7 @@ function App() {
   const [signedIn, setSignedIn] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem('token'); // Check if token exists in localStorage
+    const token = localStorage.getItem('token');
     if (token) {
       const userObject = jwtDecode(token);
       const { sub: userId } = userObject;
