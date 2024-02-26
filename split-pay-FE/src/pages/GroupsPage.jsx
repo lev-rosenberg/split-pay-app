@@ -1,19 +1,31 @@
-import styles from "../module-styles/GroupsPage.module.css"; 
-import {useState, useEffect} from "react"; 
+import {useState, useEffect, useContext} from "react"; 
+import { Context } from "../contexts/userContext";
 import { useNavigate } from "react-router-dom";
 import Axios from "axios";
+import styles from "../module-styles/GroupsPage.module.css"; 
 
 const GroupsPage = () => {
     const navigate = useNavigate(); 
     const [curGroups, setCurGroups] = useState([]); 
     const [allGroups, setAllGroups] = useState([]); 
+
+    const { state, dispatch } = useContext(Context);
+    const { userId }  = state ;
     //get all groups from server!
     useEffect(() => {
-        Axios.get("http://localhost:8000/groups/").then(response => {
-            console.log(response.data.groups); 
-            setAllGroups(response.data.groups.map(g => g.groupname));
-            setCurGroups(response.data.groups.filter(group => group.isCurrent).map(group => group.groupname))
-        }).catch(err => console.log(err.message)); 
+        Axios.get(`http://localhost:8000/groupMembers/${userId}`).then(response => {
+          response.data.groups.forEach(gm => {
+            console.log("gm", gm);
+            Axios.get(`http://localhost:8000/groups/${gm.groupid}`).then(response => {
+              console.log("group", response.data);
+              if (response.data.isCurrent) {
+                setCurGroups([...curGroups, response.data.group.groupname]);
+              }
+              setAllGroups([...allGroups, response.data.group.groupname]);
+            }).catch(err => console.log(err.message));
+          });
+        }).catch(err => console.log(err.message));
+        
     }, []); 
     //function that is called when button  click happens => initiates payment split for the pertained group! 
     const handleInitiatePaymentSplit = (cg) => {

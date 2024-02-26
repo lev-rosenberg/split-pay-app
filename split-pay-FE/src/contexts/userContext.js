@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, Dispatch } from "react";
+import React, { createContext, useReducer } from "react";
 
 const initialState = {
   userId: null,
@@ -9,10 +9,8 @@ const initialState = {
 const reducer = (state, action) => {
   switch (action.type) {
     case "SET_USER_ID":
-      console.log("New user id:", action.payload);
       return { ...state, userId: action.payload };
     case "SET_IS_LEADER":
-      console.log("New leader status:", action.payload);
       return { ...state, isLeader: {...state.isLeader, [action.payload.groupId]: action.payload.isLeader}};
     default:
       return state;

@@ -7,7 +7,10 @@ router.post('/', (req, res) => {
   //parse request body! 
   const body = req.body; 
   const {userID, isLeader, hasAcceptedTerms, amountOwed, userName, email} = body; 
-  const query = 'INSERT INTO Users(userID, isLeader, hasAcceptedTerms, amountOwed, userName, email) VALUES ($1, $2, $3, $4, $5, $6)'
+  const query = 
+    `INSERT INTO Users(userID, isLeader, hasAcceptedTerms, amountOwed, userName, email) 
+    VALUES ($1, $2, $3, $4, $5, $6)
+    ON CONFLICT (userID) DO NOTHING` // if user already exists, don't add them again!
   const values = [userID, isLeader, hasAcceptedTerms, amountOwed, userName, email]
   pool.query(query,
               values, 

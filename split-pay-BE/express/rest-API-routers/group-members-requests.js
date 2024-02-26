@@ -27,17 +27,17 @@ router.get("/", (req, res) => {
 
 router.get('/:id', (req, res) => {
     const groupID = req.params.id; 
-    const getGroupMembersQuery = `SELECT * FROM GroupMembers WHERE groupid = $1`
+    const getGroupMembersQuery = `SELECT * FROM GroupMembers WHERE memberid = $1`
     pool.query(getGroupMembersQuery, [groupID], (err, result) => {
         if (err) {
             console.log(err.message); 
             res.status(400).send('Error getting group members');
         } else {
             console.log(`get res: ${result}`); 
-            res.status(200).send(result.rows)
+            res.status(200).json({message: "Got all Groups!", groups: result.rows}); 
         }
     }); 
-});
+}); 
 
 router.delete('/:id', (req, res) => {
   const groupID = req.params.id;

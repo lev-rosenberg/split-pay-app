@@ -50,9 +50,9 @@ router.get('/:id', (req, res) => {
             res.status(400).json({error: err.message}); 
         } else {
             console.log(`res: ${result.rows[0]}`); 
-            if(!result.rows[0]){
-                res.status(404).json({error: `No group with id: ${groupID} found!`}); 
-            }
+            // if(!result.rows[0]){
+            //     res.status(404).json({error: `No group with id: ${groupID} found!`}); 
+            // }
             res.status(200).json({message: "Succesfully got group!", group: result.rows[0]})
         }
     }); 
