@@ -5,13 +5,11 @@ const pool = require('../pool.js')
 router.post('/', (req, res) => {
   //parse request body! 
   const body = req.body; 
-  const {groupID, leaderID, groupName, hasEveryoneAcceptedTerms, totalOwed} = body; 
+  const {groupID, leaderID, groupName, hasEveryoneAcceptedTerms, totalOwed, isCurrent} = body; 
   console.log(`groupID: ${groupID}`); 
-  const query = 'INSERT INTO Groups(groupID, leaderID, groupName, hasEveryoneAcceptedTerms, totalOwed) VALUES ($1, $2, $3, $4, $5)'
-  const values = [groupID, leaderID, groupName, hasEveryoneAcceptedTerms, totalOwed]
-  pool.query(query,
-              values, 
-              (err, result) => {
+  const query = 'INSERT INTO Groups(groupID, leaderID, groupName, hasEveryoneAcceptedTerms, totalOwed, isCurrent) VALUES ($1, $2, $3, $4, $5, $6)'
+  const values = [groupID, leaderID, groupName, hasEveryoneAcceptedTerms, totalOwed, isCurrent]
+  pool.query(query, values, (err, result) => {
       if(err){
           console.log(`error message groups: ${err.message}`); 
           res.status(400).json({error: err.message}); 

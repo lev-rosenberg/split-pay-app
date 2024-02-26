@@ -6,12 +6,12 @@ router.post('/', (req, res) => {
     console.log("handler for posting user triggered!"); 
   //parse request body! 
   const body = req.body; 
-  const {userID, isLeader, hasAcceptedTerms, amountOwed, userName, email} = body; 
+  const {userID, hasAcceptedTerms, amountOwed, userName, email} = body; 
   const query = 
-    `INSERT INTO Users(userID, isLeader, hasAcceptedTerms, amountOwed, userName, email) 
-    VALUES ($1, $2, $3, $4, $5, $6)
+    `INSERT INTO Users(userID, hasAcceptedTerms, amountOwed, userName, email) 
+    VALUES ($1, $2, $3, $4, $5)
     ON CONFLICT (userID) DO NOTHING` // if user already exists, don't add them again!
-  const values = [userID, isLeader, hasAcceptedTerms, amountOwed, userName, email]
+  const values = [userID, hasAcceptedTerms, amountOwed, userName, email]
   pool.query(query,
               values, 
               (err, result) => {
@@ -54,11 +54,11 @@ router.get('/:id', (req, res) => {
 router.put('/:id', (req, res) => {
     const userID = req.params.id; 
     const body = req.body; 
-    const {isLeader, hasAcceptedTerms, amountOwed, userName, email} = body; 
+    const {hasAcceptedTerms, amountOwed, userName, email} = body; 
     const putQuery = `UPDATE Users
-                     SET isLeader = $2, hasAcceptedTerms=$3, amountOwed=$4, userName=$5, email=$6
+                     SET hasAcceptedTerms=$2, amountOwed=$3, userName=$4, email=$5
                      WHERE userID = $1`;
-    const values = [userID, isLeader, hasAcceptedTerms, amountOwed, userName, email];
+    const values = [userID, hasAcceptedTerms, amountOwed, userName, email];
     pool.query(putQuery, values, (err, result) => {
         if(err){
             res.status(400).json({error: err.message}); 
