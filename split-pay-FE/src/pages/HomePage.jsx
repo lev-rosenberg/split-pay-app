@@ -1,5 +1,6 @@
 import styles from "../module-styles/HomePage.module.css"
-import {useState} from "react"; 
+import React, { useState, useContext } from "react";
+import { Context } from "../contexts/userContext"; 
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
@@ -11,11 +12,19 @@ const HomePage = () => {
     const [groupName, setGroupName] = useState(""); 
     const [isCreated, setIsCreated] = useState(false); 
     const [groupLink, setGroupLink] = useState('')
+    const { state } = useContext(Context);
     const handleCreateGroup = () => {
-        const newGroup = {groupName, groupID: uuidv4(), leaderID: "", hasEveryoneAcceptedTerms: false, totalOwed: 0.0, isCurrent: true}
+        const groupID = uuidv4();
+        // add group to groups table!
+        const newGroup = {groupName: groupName, groupID: groupID, leaderID: state.userId, hasEveryoneAcceptedTerms: false, totalOwed: 0.0, isCurrent: true}
         Axios.post("http://localhost:8000/groups", newGroup).then(response => {
+          Axios.post("http://localhost:8000/groupMembers", newGroupMember).then(response => {
             console.log(response); 
+          }).catch(err => console.log(err.message));
         }).catch(err => console.log(err.message)); 
+        // add group-member association to groupMembers table!
+        const newGroupMember = {groupID: groupID, memberID: state.userId, isLeader: true}
+        
         setIsCreated(true); 
         setGroupLink('https://unique-link-to-group-page'); 
     }

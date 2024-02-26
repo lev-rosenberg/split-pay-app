@@ -9,7 +9,7 @@ const GroupsPage = () => {
     const [curGroups, setCurGroups] = useState([]); 
     const [allGroups, setAllGroups] = useState([]); 
 
-    const { state, dispatch } = useContext(Context);
+    const { state } = useContext(Context);
     const { userId }  = state ;
     //get all groups from server!
     useEffect(() => {
@@ -18,14 +18,13 @@ const GroupsPage = () => {
             console.log("gm", gm);
             Axios.get(`http://localhost:8000/groups/${gm.groupid}`).then(response => {
               console.log("group", response.data);
-              if (response.data.group.isCurrent) {
+              if (response.data.group.iscurrent) {
                 setCurGroups([...curGroups, response.data.group.groupname]);
               }
               setAllGroups([...allGroups, response.data.group.groupname]);
             }).catch(err => console.log(err.message));
           });
         }).catch(err => console.log(err.message));
-        
     }, []); 
     //function that is called when button  click happens => initiates payment split for the pertained group! 
     const handleInitiatePaymentSplit = (cg) => {
@@ -41,7 +40,9 @@ const GroupsPage = () => {
             </div>
             <h5>All Groups:</h5>
             <div className={styles["all-groups"]}>
-                {allGroups.map((ag, idx) => <button key = {idx} type="button" onClick={() => handleInitiatePaymentSplit(ag)}>{ag}</button>)}
+                {allGroups.map((ag, idx) => (
+                  <button key = {idx} type="button" onClick={() => handleInitiatePaymentSplit(ag)}>{ag}</button>
+                ))}
             </div>
         </div>
     ); 

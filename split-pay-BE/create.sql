@@ -1,6 +1,5 @@
 CREATE TABLE Users(
   userID TEXT PRIMARY KEY NOT NULL,
-  isLeader BOOLEAN NOT NULL,
   hasAcceptedTerms BOOLEAN NOT NULL,
   amountOwed FLOAT,
   userName TEXT,
@@ -19,6 +18,7 @@ CREATE TABLE Groups(
 CREATE TABLE GroupMembers(
   groupID TEXT NOT NULL,
   memberID TEXT NOT NULL,
+  isLeader BOOLEAN,
   FOREIGN KEY (groupID) REFERENCES Groups(groupID),
   FOREIGN KEY (memberID) REFERENCES Users(userID)
 );

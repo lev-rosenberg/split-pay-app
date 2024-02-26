@@ -1,4 +1,4 @@
-INSERT INTO Users(userID, isLeader, hasAcceptedTerms, amountOwed, userName, email)
+INSERT INTO Users(userID, hasAcceptedTerms, amountOwed, userName, email)
 VALUES ('test_id', TRUE, TRUE, 0, 'test_name', 'example@gmail.com'); 
 
 

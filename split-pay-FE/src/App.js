@@ -35,29 +35,17 @@ function App() {
       userID: sub,
       userName: name,
       email: email,
-      isLeader: false,
       hasAcceptedTerms: false,
       amountOwed: 0
     };
+    
     Axios.post("http://localhost:8000/users", body)
       .then(response => {
-        console.log(response);
         dispatch({ type: "SET_USER_ID", payload: sub });
         setSignedIn(true);
       })
       .catch(err => console.log(err.message));
   }
-
-  useEffect(() => {
-    console.log("state: ", state);
-    if (userId) {
-      Axios.get(`http://localhost:8000/groups/${userId}`)
-        .then(response => {
-          console.log("in use effect", response.data);
-        })
-        .catch(err => console.log(err.message));
-    }
-  }, [state, signedIn]);
 
   return (
     <BrowserRouter>
