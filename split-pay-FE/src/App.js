@@ -38,7 +38,6 @@ function App() {
       hasAcceptedTerms: false,
       amountOwed: 0
     };
-    
     Axios.post("http://localhost:8000/users", body)
       .then(response => {
         dispatch({ type: "SET_USER_ID", payload: sub });
