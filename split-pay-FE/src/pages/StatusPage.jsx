@@ -3,12 +3,21 @@ import { useLocation } from "react-router-dom";
 import styles from "../module-styles/StatusPage.module.css"; 
 import MemberStatus from "../components/MemberStatus"; 
 import Axios from "axios";
+
+/* 
+------- TO DO ------- 
+1. backend: incorporate websocket to update status page in real-time
+2. backend: add put request to group table to update haseveryoneacceptedterms once all members have accepted terms
+3. frontend: disable finish payment button until all members have accepted terms
+4. backend: once payment finished, update isCurrent to false in group table
+*/
+
 const StatusPage = () => {
     const [groupMembers, setGroupMembers] = useState([]);
     const [hasEveryoneAcceptedTerms, setHasEveryoneAcceptedTerms] = useState({});
     const loc = useLocation();
     const { groupid, groupname, totalowed} = loc.state && loc.state.groupData;
-    
+
     useEffect(() => {
         Axios.get(`http://localhost:8000/groups/${groupid}/users`).then(response => {
             const userData = response.data.users;
@@ -22,7 +31,7 @@ const StatusPage = () => {
             const groupData = response.data.group;
             setHasEveryoneAcceptedTerms(groupData.haseveryoneacceptedterms);
         }).catch(err => console.log(err.message));
-    }, []);
+    }, [groupid, hasEveryoneAcceptedTerms]);
 
     return (
         <div className={styles["status-wrapper"]}>

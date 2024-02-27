@@ -35,7 +35,7 @@ const GroupsPage = () => {
         setCurGroups(curGroups);
         setPreviousGroups(allGroups);
       }).catch(err => console.log(err.message));
-    }, []); 
+    }, [userId]); 
 
     //function that is called when button  click happens => initiates payment split for the pertained group! 
     const handleInitiatePaymentSplit = (group) => {

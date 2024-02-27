@@ -20,7 +20,6 @@ function PaymentPage() {
     const [customAmounts, setCustomAmounts] = useState({});
     const groupData = loc.state && loc.state.groupData; 
 
-    //also need way to get all members part of group with given "groupName"! 
     useEffect(() => {
       console.log(groupData);
       Axios.get(`http://localhost:8000/groups/${groupData.groupid}/users`).then(response => {
@@ -32,9 +31,8 @@ function PaymentPage() {
         }
         setGroupMembers(users);
       }).catch(err => console.log(err.message));
-    }, []); 
+    }, [groupData]); 
 
-    //need some way to get group size! 
     const groupSize = groupMembers.length;  
     const equalAmount = formFields["strategy"] === "equal" && (formFields["amount"] / groupSize).toFixed(2); 
     
