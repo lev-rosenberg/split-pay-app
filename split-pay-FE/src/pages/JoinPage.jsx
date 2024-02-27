@@ -10,6 +10,7 @@ export default function JoinPage() {
     const groupId = loc.key;
     const [groupData, setGroupData] = useState({});
     const navigate = useNavigate();
+    
     useEffect(() => {
         Axios.get(`http://localhost:8000/groups/${groupId}`).then(response => {
             const groupData = response.data.group;
@@ -19,7 +20,7 @@ export default function JoinPage() {
     
     function handleJoinGroup() {
         // add user to group
-        const newGroupMember = {groupID: groupId, memberID: userId, isLeader: false}
+        const newGroupMember = {groupID: groupId, memberID: userId, isLeader: false, amountOwed: 0.0, hasAcceptedTerms: false}
         Axios.post(`http://localhost:8000/groupmembers/`, newGroupMember).then(response => {
             console.log(`User added to group!`);
         }).catch(err => console.log(err.message));

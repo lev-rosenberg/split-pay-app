@@ -28,7 +28,7 @@ const HomePage = () => {
         const groupID = uuidv4();
         // add group to groups table!
         const newGroup = {groupName: groupName, groupID: groupID, leaderID: state.userId, hasEveryoneAcceptedTerms: false, totalOwed: 0.0, isCurrent: true}
-        const newGroupMember = {groupID: groupID, memberID: state.userId, isLeader: true}
+        const newGroupMember = {groupID: groupID, memberID: state.userId, isLeader: true, amountOwed: 0.0, hasAcceptedTerms: true}
         Axios.post("http://localhost:8000/groups", newGroup).then(response => {
           // add group-member association to groupMembers table!
           Axios.post("http://localhost:8000/groupMembers", newGroupMember).then(response => {

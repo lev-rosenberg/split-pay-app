@@ -62,7 +62,7 @@ router.get('/:groupID', (req, res) => {
 router.get('/:groupID/users', (req, res) => {
   const memberID = req.params.groupID; 
   const getGroupMembersQuery = `
-    SELECT Users.*
+    SELECT Users.*, GroupMembers.isLeader, GroupMembers.amountOwed, GroupMembers.hasAcceptedTerms
     FROM Users
     INNER JOIN GroupMembers
     ON Users.userid = GroupMembers.memberid
@@ -93,9 +93,9 @@ router.put('/:groupID', (req, res) => {
         if(result.rows.length){
             pool.query(putGroupQuery, values).then( _ => {
                 pool.query(selectQuery, [groupID]).then(result => {
-                    res.status(200).json({message: "Updated group successfully!", newGroup: result.rows[0]})
+                    res.status(200).json({message: "Updated group successfully!", group: result.rows[0]})
                 }).catch(err => res.status(400).json({error: err.message})); 
-        }).catch(err => res.status(400).json({error: err.message})); 
+            }).catch(err => res.status(400).json({error: err.message})); 
         } else{
             res.status(404).json({error: "Can't find group to update!"}); 
         }

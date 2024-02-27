@@ -1,19 +1,22 @@
-import React, {useState} from "react"; 
+import React, {useEffect, useState} from "react"; 
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import styles from "../module-styles/MemberStatus.module.css"; 
 import Axios from "axios";
-const MemberStatus = ({member}) => {
+const MemberStatus = ({member, groupid}) => {
     const [isAgreed, setIsAgreed] = useState(false); 
-    const {userid, username, email, amountowed} = member;
-    
+    const {userid, isleader, amountowed, username } = member;
+
     function handleChangeAgreed() {
-      const user = {hasAcceptedTerms: !isAgreed, amountOwed: amountowed, userName: username, email: email};
-      Axios.put(`http://localhost:8000/users/${userid}`, user).then(response => {
-        console.log("response from user put request: ", response.data);
+      const user = {groupID: groupid, isLeader: isleader, hasAcceptedTerms: !isAgreed, amountOwed: amountowed};
+      Axios.put(`http://localhost:8000/groupMembers/${userid}`, user).then(response => {
+        console.log("response from groupMember put request: ", response.data);
       }).catch(err => console.log(err.message));
       setIsAgreed(!isAgreed);
     }
+    useEffect(() => {
+      console.log("member: ", member);
+    }, [member]);
     return (<div className={styles["member-status-wrapper"]}>
         <div className={styles["left"]}>
           <button onClick={handleChangeAgreed}>

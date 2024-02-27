@@ -48,21 +48,21 @@ function PaymentPage() {
     const handlePaymentStart = () => {
         //transition over to see real-time status updates for each member of group! 
         for (let i = 0; i < groupMembers.length; i++) {
-          const {userid, username, email, hasacceptedterms} = groupMembers[i];
+          const {userid} = groupMembers[i];
           const amountOwed = formFields["strategy"] === "equal" ? equalAmount : customAmounts[userid];
           console.log("amount owed: ", amountOwed);
-          const user = {hasAcceptedTerms: hasacceptedterms, amountOwed: amountOwed, userName: username, email: email};
-          Axios.put(`http://localhost:8000/users/${userid}`, user).then(response => {  
+          const groupMember = {groupID: groupData.groupid, isLeader: true, hasAcceptedTerms: false, amountOwed: amountOwed};
+          Axios.put(`http://localhost:8000/groupMembers/${userid}`, groupMember).then(response => {  
             console.log("response from user put request: ", response.data);
           }).catch(err => console.log(err.message));
         }
-        const {groupid, leaderid, groupname, haseveryoneacceptedterms, iscurrent} = groupData;
+        const {groupid, leaderid, groupname, iscurrent} = groupData;
         console.log(`formFields[amount]: ${formFields["amount"]}`)
-        const group = {leaderID: leaderid, groupName: groupname, hasEveryoneAcceptedTerms: haseveryoneacceptedterms, totalOwed: formFields["amount"], iscurrent: iscurrent, groupid};
+        const group = {leaderID: leaderid, groupName: groupname, hasEveryoneAcceptedTerms: false, totalOwed: formFields["amount"], iscurrent: iscurrent};
         Axios.put(`http://localhost:8000/groups/${groupid}`, group).then(response => {
           console.log("response from group put request: ", response.data);
         }).catch(err => console.log(err.message));
-        navigate("/status", {state: {groupData: group}}); 
+        navigate("/status", {state: {groupData: group, groupId: groupid}}); 
     }
     function handleCustomAmounts(groupname, e) {
         const newState = {...customAmounts}; 

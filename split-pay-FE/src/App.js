@@ -13,8 +13,7 @@ import Axios from "axios";
 import "../src/App.css";
 
 function App() {
-  const { state, dispatch } = useContext(Context);
-  const { userId } = state;
+  const { dispatch } = useContext(Context);
   const [signedIn, setSignedIn] = useState(false);
 
   useEffect(() => {
@@ -25,7 +24,8 @@ function App() {
       dispatch({ type: "SET_USER_ID", payload: userId });
       setSignedIn(true);
     }
-  }, []);
+  }, [dispatch]);
+
   function handleSuccess(response) {
     localStorage.setItem('token', response.credential);
     const userObject = jwtDecode(response.credential);
@@ -33,9 +33,7 @@ function App() {
     const body = {
       userID: sub,
       userName: name,
-      email: email,
-      hasAcceptedTerms: false,
-      amountOwed: 0
+      email: email
     };
     Axios.post("http://localhost:8000/users", body)
       .then(response => {

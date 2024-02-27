@@ -5,9 +5,10 @@ const pool = require('../pool.js')
 // groupId: "testId" memberId: "lev"
 router.post('/', (req,res) => {
     const body = req.body; 
-    const {groupID, memberID} = body
-    const insertGroupMemberQuery = `INSERT INTO GroupMembers(groupid, memberid) VALUES($1, $2)`
-    pool.query(insertGroupMemberQuery, [groupID, memberID], (err, resp) => {
+    const {groupID, memberID, isLeader, amountOwed, hasAcceptedTerms} = body
+    const values = [groupID, memberID, isLeader, amountOwed, hasAcceptedTerms]
+    const insertGroupMemberQuery = `INSERT INTO GroupMembers(groupid, memberid, isleader, amountowed, hasacceptedterms) VALUES($1, $2, $3, $4, $5)`
+    pool.query(insertGroupMemberQuery, values, (err, resp) => {
         if(err){
             console.log(`error for inserting a new groupMember: ${err.message}`)
             res.status(400).json({error: err.message}); 
@@ -39,6 +40,28 @@ router.get('/:id', (req, res) => {
     }); 
 }); 
 
+router.put('/:id', (req, res) => {
+    const memberID = req.params.id; 
+    const body = req.body; 
+    const {groupID, isLeader, amountOwed, hasAcceptedTerms} = body; 
+    const putQuery = `UPDATE GroupMembers
+                     SET isLeader=$2, amountOwed=$3, hasAcceptedTerms=$4
+                     WHERE groupID = $1 AND memberID = $5`;
+    const values = [groupID, isLeader, amountOwed, hasAcceptedTerms, memberID];
+    pool.query(putQuery, values, (err, result) => {
+        if(err){
+            res.status(400).json({error: err.message}); 
+        } else{
+            const getUpdatedGroupMemberQuery = `SELECT * FROM GroupMembers WHERE groupID = $1 AND memberID = $2`;
+            pool.query(getUpdatedGroupMemberQuery, [groupID, memberID]).then(result => {
+                if(!result.rows.length){
+                    res.status(404).json({message: "Can't find the newly updated group member!"}); 
+                }
+                res.status(200).json({message: "Succesfully updated group member!", groupMember: result.rows[0]})
+            }).catch(err => res.status(400).json({error: err.message})); 
+        }
+    }); 
+});
 
 router.delete('/:id', (req, res) => {
   const groupID = req.params.id;
