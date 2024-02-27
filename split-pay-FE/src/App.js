@@ -26,7 +26,6 @@ function App() {
       setSignedIn(true);
     }
   }, []);
-
   function handleSuccess(response) {
     localStorage.setItem('token', response.credential);
     const userObject = jwtDecode(response.credential);

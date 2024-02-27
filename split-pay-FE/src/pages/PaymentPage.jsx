@@ -19,7 +19,6 @@ function PaymentPage() {
     const [groupMembers, setGroupMembers] = useState([]);
     const [customAmounts, setCustomAmounts] = useState({});
     const groupData = loc.state && loc.state.groupData; 
-
     useEffect(() => {
       console.log(groupData);
       Axios.get(`http://localhost:8000/groups/${groupData.groupid}/users`).then(response => {
@@ -58,20 +57,19 @@ function PaymentPage() {
           }).catch(err => console.log(err.message));
         }
         const {groupid, leaderid, groupname, haseveryoneacceptedterms, iscurrent} = groupData;
-        const group = {leaderID: leaderid, groupName: groupname, hasEveryoneAcceptedTerms: haseveryoneacceptedterms, totalOwed: formFields["amount"], iscurrent: iscurrent};
+        console.log(`formFields[amount]: ${formFields["amount"]}`)
+        const group = {leaderID: leaderid, groupName: groupname, hasEveryoneAcceptedTerms: haseveryoneacceptedterms, totalOwed: formFields["amount"], iscurrent: iscurrent, groupid};
         Axios.put(`http://localhost:8000/groups/${groupid}`, group).then(response => {
           console.log("response from group put request: ", response.data);
         }).catch(err => console.log(err.message));
-        navigate("/status", {state: {groupData: groupData}}); 
+        navigate("/status", {state: {groupData: group}}); 
     }
-
     function handleCustomAmounts(groupname, e) {
         const newState = {...customAmounts}; 
         newState[groupname] = e.target.value; 
         setCustomAmounts(newState);
         console.log(customAmounts);
     }
-
     return (
         <div className={styles["payment-page-container"]}>
             <h3>Payment For {groupData.groupname}</h3>

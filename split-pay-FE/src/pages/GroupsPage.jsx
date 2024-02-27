@@ -14,10 +14,8 @@ const GroupsPage = () => {
     const navigate = useNavigate(); 
     const [curGroups, setCurGroups] = useState([]); 
     const [prevGroups, setPreviousGroups] = useState([]); 
-
     const { state } = useContext(Context);
     const { userId }  = state ;
-
     //get all groups from server!
     useEffect(() => {
       Axios.get(`http://localhost:8000/users/${userId}/groups`).then(response => {
@@ -39,8 +37,16 @@ const GroupsPage = () => {
 
     //function that is called when button  click happens => initiates payment split for the pertained group! 
     const handleInitiatePaymentSplit = (group) => {
-        //switch route to status to show in real-time status page for this specific group! 
-        navigate("/payment", {state: {groupData: group}}); 
+        const {leaderid}=group; 
+        //if user clicked on group for which they are leader, transition to 
+        if(leaderid === userId){
+           //switch route to status to show in real-time status page for this specific group! 
+           navigate("/payment", {state: {groupData: group}}); 
+        } 
+        //otherwise, it's a member clicking group! 
+        else {
+          navigate("/status", {state: {groupData: group}}); 
+        }
     }
     return (
         <div className={styles["groups-container"]}>

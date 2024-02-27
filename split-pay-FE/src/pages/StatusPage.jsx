@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useLocation } from "react-router-dom";
 import styles from "../module-styles/StatusPage.module.css"; 
 import MemberStatus from "../components/MemberStatus"; 
 import Axios from "axios";
-
+import { Context } from "../contexts/userContext";
 /* 
 ------- TO DO ------- 
 1. backend: incorporate websocket to update status page in real-time
@@ -14,10 +14,12 @@ import Axios from "axios";
 
 const StatusPage = () => {
     const [groupMembers, setGroupMembers] = useState([]);
-    const [hasEveryoneAcceptedTerms, setHasEveryoneAcceptedTerms] = useState({});
+    const [hasEveryoneAcceptedTerms, setHasEveryoneAcceptedTerms] = useState(false);
     const loc = useLocation();
-    const { groupid, groupname, totalowed} = loc.state && loc.state.groupData;
-
+    const { groupid, groupname, totalOwed, iscurrent, leaderid} = loc.state && loc.state.groupData;
+    const { state } = useContext(Context);
+    const { userId }  = state ;
+    const isLeader = leaderid === userId; 
     useEffect(() => {
         Axios.get(`http://localhost:8000/groups/${groupid}/users`).then(response => {
             const userData = response.data.users;
@@ -29,10 +31,11 @@ const StatusPage = () => {
         }).catch(err => console.log(err.message));
         Axios.get(`http://localhost:8000/groups/${groupid}`).then(response => {
             const groupData = response.data.group;
+            console.log(`groupDATA from axios.get: \n`)
+            console.log(groupData); 
             setHasEveryoneAcceptedTerms(groupData.haseveryoneacceptedterms);
         }).catch(err => console.log(err.message));
     }, [groupid, hasEveryoneAcceptedTerms]);
-
     return (
         <div className={styles["status-wrapper"]}>
             <h3>Status of {groupname}</h3>
@@ -41,9 +44,9 @@ const StatusPage = () => {
                 {groupMembers.map((gm, idx) => <MemberStatus key={idx} member={gm}/> )}
             </div>
             <div className={styles["total-owed"]}>
-                <p>Total Owed: ${totalowed} </p>
+                <p>Total Owed: ${totalOwed} </p>
             </div>
-            <button type="button">Finish Pay</button>
+            {iscurrent && (isLeader) && hasEveryoneAcceptedTerms && <button type="button">Finish Pay</button>} 
         </div>  
     ); 
 };

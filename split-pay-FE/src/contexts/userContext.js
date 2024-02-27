@@ -2,9 +2,8 @@ import React, { createContext, useReducer } from "react";
 
 const initialState = {
   userId: null,
-  isLeader: {},
+  isLeader: {}
 }
-
 
 const reducer = (state, action) => {
   switch (action.type) {

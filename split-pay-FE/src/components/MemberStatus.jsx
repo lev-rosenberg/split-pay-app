@@ -14,7 +14,6 @@ const MemberStatus = ({member}) => {
       }).catch(err => console.log(err.message));
       setIsAgreed(!isAgreed);
     }
-    
     return (<div className={styles["member-status-wrapper"]}>
         <div className={styles["left"]}>
           <button onClick={handleChangeAgreed}>
