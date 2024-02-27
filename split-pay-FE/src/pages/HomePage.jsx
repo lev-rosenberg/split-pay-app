@@ -8,6 +8,17 @@ import IconButton from '@mui/material/IconButton';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { v4 as uuidv4 } from 'uuid';
 import Axios from "axios";
+
+
+
+/* 
+------- TO DO ------- 
+1. backend: think about how to make unique group links for each group
+  1a. I think it could be as simple as https://split-pay.com/join/{groupID}/ 
+2. frontend: then we need to create a simple "join group" page that users are navigated to from the link. i could just have a "join group" button.
+3. backend: when user clicks "join group" button, we need to add the user to the groupMembers table.
+*/
+
 const HomePage = () => {
     const [groupName, setGroupName] = useState(""); 
     const [isCreated, setIsCreated] = useState(false); 

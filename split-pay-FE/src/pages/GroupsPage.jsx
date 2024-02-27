@@ -4,6 +4,12 @@ import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 import styles from "../module-styles/GroupsPage.module.css"; 
 
+/* 
+------- TO DO ------- 
+1. frontend: differentiate between groups you are leader of and groups you are not leader of                                                                    
+2. frontend: only navigate to payment page if you are leader of group, otherwise go to status page?
+*/
+
 const GroupsPage = () => {
     const navigate = useNavigate(); 
     const [curGroups, setCurGroups] = useState([]); 
