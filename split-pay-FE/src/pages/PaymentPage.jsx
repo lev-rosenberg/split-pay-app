@@ -52,7 +52,7 @@ function PaymentPage() {
         //transition over to see real-time status updates for each member of group! 
         for (let i = 0; i < groupMembers.length; i++) {
           const {userid, username, email, hasacceptedterms} = groupMembers[i];
-          const amountOwed = formFields["equal"] === "custom" ? equalAmount : customAmounts[userid];
+          const amountOwed = formFields["strategy"] === "equal" ? equalAmount : customAmounts[userid];
           console.log("amount owed: ", amountOwed);
           const user = {hasAcceptedTerms: hasacceptedterms, amountOwed: amountOwed, userName: username, email: email};
           Axios.put(`http://localhost:8000/users/${userid}`, user).then(response => {  

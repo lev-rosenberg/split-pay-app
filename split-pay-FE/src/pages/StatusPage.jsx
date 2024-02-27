@@ -8,6 +8,7 @@ const StatusPage = () => {
     const [hasEveryoneAcceptedTerms, setHasEveryoneAcceptedTerms] = useState({});
     const loc = useLocation();
     const { groupid, groupname, totalowed} = loc.state && loc.state.groupData;
+    
     useEffect(() => {
         Axios.get(`http://localhost:8000/groups/${groupid}/users`).then(response => {
             const userData = response.data.users;
@@ -22,6 +23,7 @@ const StatusPage = () => {
             setHasEveryoneAcceptedTerms(groupData.haseveryoneacceptedterms);
         }).catch(err => console.log(err.message));
     }, []);
+
     return (
         <div className={styles["status-wrapper"]}>
             <h3>Status of {groupname}</h3>
