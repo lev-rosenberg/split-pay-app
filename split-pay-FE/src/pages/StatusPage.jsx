@@ -27,7 +27,7 @@ const StatusPage = () => {
             <h3>Status of {groupname}</h3>
             <span>Amount Owed</span>
             <div className={styles["members-status"]}>
-                {groupMembers.map((gm, idx) => <MemberStatus key={idx} memberName={gm.username} amountOwed={gm.amountowed}/> )}
+                {groupMembers.map((gm, idx) => <MemberStatus key={idx} member={gm}/> )}
             </div>
             <div className={styles["total-owed"]}>
                 <p>Total Owed: ${totalowed} </p>
