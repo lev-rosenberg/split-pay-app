@@ -54,13 +54,25 @@ const GroupsPage = () => {
             <h5>Current Group:</h5>
             <div className={styles["current-group"]}>
                 {curGroups.map((cg, idx) => (
-                  <button key = {'c' + idx} type="button" onClick={() => handleInitiatePaymentSplit(cg)}>{cg.groupname}</button>
+                    <div 
+                      key = {'c' + idx} 
+                      className={styles["group-card"]}
+                      onClick={() => handleInitiatePaymentSplit(cg)}>
+                        <h4>{cg.groupname}</h4>
+                        <p>Role: {(cg.leaderid === userId) ? "leader" : "member"}</p>
+                    </div>
                 ))}
             </div>
             <h5>All Groups:</h5>
             <div className={styles["all-groups"]}>
                 {prevGroups.map((ag, idx) => (
-                  <button key = {'a' + idx} type="button" onClick={() => handleInitiatePaymentSplit(ag)}>{ag.groupname}</button>
+                  <div 
+                    key = {'a' + idx} 
+                    className={styles["group-card"]}
+                    onClick={() => handleInitiatePaymentSplit(ag)}>
+                      <h4>{ag.groupname}</h4>
+                      <p>Role: {(ag.leaderid === userId) ? "leader" : "member"}</p>
+                  </div>
                 ))}
             </div>
         </div>

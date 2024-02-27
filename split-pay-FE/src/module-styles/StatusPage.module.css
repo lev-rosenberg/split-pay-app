@@ -8,8 +8,7 @@
     font-size: 30px;
     border-bottom: 3px solid black; 
 }
-.status-wrapper span {
-}
+
 .status-wrapper button {
     width: 100px;
     height: 50px;
@@ -23,8 +22,4 @@
     display: flex;
     flex-direction: row; 
     align-items: center; 
-}
-.total-owed p {
-}
-.total-owed span {
 }

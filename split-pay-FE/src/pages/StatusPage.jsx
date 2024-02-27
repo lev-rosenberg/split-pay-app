@@ -20,7 +20,6 @@ const StatusPage = () => {
     const { state } = useContext(Context);
     const { userId }  = state ;
     const isLeader = leaderid === userId; 
-    console.log("isCurrent", iscurrent);
     useEffect(() => {
         Axios.get(`http://localhost:8000/groups/${groupid}/users`).then(response => {
             const userData = response.data.users;
@@ -45,6 +44,7 @@ const StatusPage = () => {
             <div className={styles["total-owed"]}>
                 <p>Total Owed: ${totalOwed} </p>
             </div>
+            {console.log("is", iscurrent && (isLeader) && hasEveryoneAcceptedTerms)}
             {iscurrent && (isLeader) && hasEveryoneAcceptedTerms && <button type="button">Finish Pay</button>} 
         </div>  
     ); 

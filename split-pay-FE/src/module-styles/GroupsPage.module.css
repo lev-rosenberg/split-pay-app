@@ -18,10 +18,14 @@
     text-align: center;
 }
 
-.groups-container button {
-    padding: 2rem;
+.groups-container .group-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
     background-color: #B6A9D0; 
     border-radius: 5px;
+    border: 1px solid black;
 }
 .groups-container button:hover {
     background-color: #E2DDEC;

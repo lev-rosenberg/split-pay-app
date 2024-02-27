@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from "react"; 
+import React, { useState } from "react"; 
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import styles from "../module-styles/MemberStatus.module.css"; 
 import Axios from "axios";
 const MemberStatus = ({member, groupid}) => {
-    const [isAgreed, setIsAgreed] = useState(false); 
-    const {userid, isleader, amountowed, username } = member;
+    const {userid, isleader, amountowed, username, hasacceptedterms } = member;
+    const [isAgreed, setIsAgreed] = useState(hasacceptedterms); 
 
     function handleChangeAgreed() {
       const user = {groupID: groupid, isLeader: isleader, hasAcceptedTerms: !isAgreed, amountOwed: amountowed};
