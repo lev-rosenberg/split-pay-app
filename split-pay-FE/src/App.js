@@ -5,6 +5,7 @@ import GroupsPage from "./pages/GroupsPage";
 import ProfilePage from "./pages/ProfilePage";
 import PaymentPage from "./pages/PaymentPage";
 import StatusPage from "./pages/StatusPage";
+import JoinPage from "./pages/JoinPage";
 import MainLayout from "./layouts/MainLayout";
 import { GoogleLogin } from '@react-oauth/google';
 import { Context } from "./contexts/userContext";
@@ -13,21 +14,23 @@ import Axios from "axios";
 import "../src/App.css";
 
 function App() {
-  const { dispatch } = useContext(Context);
+  const { state, dispatch } = useContext(Context);
   const [signedIn, setSignedIn] = useState(false);
-
+  
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('split-pay-login-token');
     if (token) {
       const userObject = jwtDecode(token);
       const { sub: userId } = userObject;
       dispatch({ type: "SET_USER_ID", payload: userId });
       setSignedIn(true);
-    }
-  }, [dispatch]);
+    } else {
+      setSignedIn(false);
+    };
+  }, [state.signedIn]);
 
   function handleSuccess(response) {
-    localStorage.setItem('token', response.credential);
+    localStorage.setItem('split-pay-login-token', response.credential);
     const userObject = jwtDecode(response.credential);
     const { name, email, sub } = userObject;
     const body = {
@@ -38,7 +41,7 @@ function App() {
     Axios.post("http://localhost:8000/users", body)
       .then(response => {
         dispatch({ type: "SET_USER_ID", payload: sub });
-        setSignedIn(true);
+        dispatch({ type: "SET_SIGNED_IN", payload: true });
       })
       .catch(err => console.log(err.message));
   }
@@ -53,6 +56,7 @@ function App() {
             <Route path="/groups" element={<GroupsPage />} />
             <Route path="/payment" element={<PaymentPage />} />
             <Route path="/status" element={<StatusPage />} />
+            <Route path="/join/:groupID" element={<JoinPage />} />
           </Routes>
         </MainLayout>
       ) : (

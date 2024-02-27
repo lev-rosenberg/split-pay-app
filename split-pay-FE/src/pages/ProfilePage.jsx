@@ -3,6 +3,7 @@ import { Context } from "../contexts/userContext";
 import ProfileIcon from "../components/ProfileIcon"; 
 import Axios from "axios";
 import styles from "../module-styles/ProfilePage.module.css"; 
+import { googleLogout } from '@react-oauth/google';
 
 /* 
 ------- TO DO ------- 
@@ -12,13 +13,18 @@ import styles from "../module-styles/ProfilePage.module.css";
 */
 
 const ProfilePage = () => {
-    const { state } = useContext(Context);
+    const { state, dispatch } = useContext(Context);
     const { userId } = state;
     const [isEditing, setIsEditing] = useState(false);
     const [userData, setUserData] = useState({});
+
     const logOutHandler = () => {
-        console.log(`logoutHandler called!`); 
+        googleLogout();
+        localStorage.removeItem('split-pay-login-token');
+        dispatch({ type: "SET_SIGNED_IN", payload: false });
     }
+
+
     useEffect(() => {
         Axios.get(`http://localhost:8000/users/${userId}`).then(response => {
             const userData = response.data.user;

@@ -16,11 +16,11 @@ const StatusPage = () => {
     const [groupMembers, setGroupMembers] = useState([]);
     const [hasEveryoneAcceptedTerms, setHasEveryoneAcceptedTerms] = useState(false);
     const loc = useLocation();
-    const { groupname, totalOwed, iscurrent, leaderid} = loc.state && loc.state.groupData;
-    const groupid = loc.state && loc.state.groupId;
+    const { groupid, groupname, totalOwed, iscurrent, leaderid} = loc.state && loc.state.groupData;
     const { state } = useContext(Context);
     const { userId }  = state ;
     const isLeader = leaderid === userId; 
+    console.log("isCurrent", iscurrent);
     useEffect(() => {
         Axios.get(`http://localhost:8000/groups/${groupid}/users`).then(response => {
             const userData = response.data.users;

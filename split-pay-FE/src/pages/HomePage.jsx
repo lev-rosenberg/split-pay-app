@@ -35,7 +35,7 @@ const HomePage = () => {
           dispatch({ type: "SET_IS_LEADER", payload: groupID });
         }).catch(err => console.log(err.message)); 
         setIsCreated(true); 
-        setGroupLink('https://unique-link-to-group-page'); 
+        setGroupLink('https://http://localhost:3000/join/' + groupID); 
     }
     const handleCopyLink = (linkURL) => {
         navigator.clipboard.writeText(linkURL).then(()=> {}).catch(err => console.log(err.message)); 

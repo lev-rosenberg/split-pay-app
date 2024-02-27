@@ -52,9 +52,9 @@ function PaymentPage() {
           Axios.put(`http://localhost:8000/groupMembers/${userid}`, groupMember).then(response => {}).catch(err => console.log(err.message));
         }
         const {groupid, leaderid, groupname, iscurrent} = groupData;
-        const group = {leaderID: leaderid, groupName: groupname, hasEveryoneAcceptedTerms: false, totalOwed: formFields["amount"], iscurrent: iscurrent};
+        const group = {leaderID: leaderid, groupName: groupname, hasEveryoneAcceptedTerms: false, totalOwed: formFields["amount"], isCurrent: iscurrent};
         Axios.put(`http://localhost:8000/groups/${groupid}`, group).then(response => {}).catch(err => console.log(err.message));
-        navigate("/status", {state: {groupData: group, groupId: groupid}}); 
+        navigate("/status", {state: {groupData: groupData}}); 
     }
     function handleCustomAmounts(groupname, e) {
         const newState = {...customAmounts}; 

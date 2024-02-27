@@ -1,26 +1,26 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Context } from "../contexts/userContext";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Axios from "axios";
 
 export default function JoinPage() {
     const { state } = useContext(Context);
     const { userId } = state;
-    const loc = useLocation();
-    const groupId = loc.key;
+    const { groupID } = useParams();
     const [groupData, setGroupData] = useState({});
     const navigate = useNavigate();
     
     useEffect(() => {
-        Axios.get(`http://localhost:8000/groups/${groupId}`).then(response => {
+        Axios.get(`http://localhost:8000/groups/${groupID}`).then(response => {
             const groupData = response.data.group;
+            console.log("response", response.data);
             setGroupData(groupData);
         }).catch(err => console.log(err.message));
-    }, [groupId]);
+    }, [groupID]);
     
     function handleJoinGroup() {
         // add user to group
-        const newGroupMember = {groupID: groupId, memberID: userId, isLeader: false, amountOwed: 0.0, hasAcceptedTerms: false}
+        const newGroupMember = {groupID: groupID, memberID: userId, isLeader: false, amountOwed: 0.0, hasAcceptedTerms: false}
         Axios.post(`http://localhost:8000/groupmembers/`, newGroupMember).then(response => {}).catch(err => console.log(err.message));
         navigate("/status", {state: {groupData: groupData}})
     }
