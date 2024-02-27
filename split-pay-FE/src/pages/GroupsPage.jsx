@@ -14,17 +14,16 @@ const GroupsPage = () => {
 
     //get all groups from server!
     useEffect(() => {
-      Axios.get(`http://localhost:8000/groupMembers/${userId}`).then(response => {
+      Axios.get(`http://localhost:8000/users/${userId}/groups`).then(response => {
         const groupsData = response.data.groups;
         const curGroups = [];
         const allGroups = [];
         for (let i = 0; i < groupsData.length; i++) {
-          const groupName = groupsData[i].groupname;
           if (groupsData[i].iscurrent) {
-            curGroups.push(groupName);
+            curGroups.push(groupsData[i]);
           }
           else {
-            allGroups.push(groupName);
+            allGroups.push(groupsData[i]);
           }
         }
         setCurGroups(curGroups);
@@ -33,9 +32,9 @@ const GroupsPage = () => {
     }, []); 
 
     //function that is called when button  click happens => initiates payment split for the pertained group! 
-    const handleInitiatePaymentSplit = (cg) => {
+    const handleInitiatePaymentSplit = (group) => {
         //switch route to status to show in real-time status page for this specific group! 
-        navigate("/payment", {state: {groupName: cg}}); 
+        navigate("/payment", {state: {groupData: group}}); 
     }
     return (
         <div className={styles["groups-container"]}>
@@ -43,13 +42,13 @@ const GroupsPage = () => {
             <h5>Current Group:</h5>
             <div className={styles["current-group"]}>
                 {curGroups.map((cg, idx) => (
-                  <button key = {'c' + idx} type="button" onClick={() => handleInitiatePaymentSplit(cg)}>{cg}</button>
+                  <button key = {'c' + idx} type="button" onClick={() => handleInitiatePaymentSplit(cg)}>{cg.groupname}</button>
                 ))}
             </div>
             <h5>All Groups:</h5>
             <div className={styles["all-groups"]}>
                 {prevGroups.map((ag, idx) => (
-                  <button key = {'a' + idx} type="button" onClick={() => handleInitiatePaymentSplit(ag)}>{ag}</button>
+                  <button key = {'a' + idx} type="button" onClick={() => handleInitiatePaymentSplit(ag)}>{ag.groupname}</button>
                 ))}
             </div>
         </div>

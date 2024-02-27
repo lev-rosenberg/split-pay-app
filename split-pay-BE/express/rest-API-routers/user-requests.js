@@ -30,10 +30,10 @@ router.post('/', (req, res) => {
       }
   }); 
 });
-
-router.get('/:id', (req, res) => {
+// get the user with this id
+router.get('/:userID', (req, res) => {
     //get userId as route param! 
-    const userID = req.params.id; 
+    const userID = req.params.userID; 
     const getQuery = `SELECT * FROM Users WHERE userID = $1`
     pool.query(getQuery, [userID], (err, response) => {
         if(err){
@@ -51,8 +51,28 @@ router.get('/:id', (req, res) => {
     });
 }); 
 
-router.put('/:id', (req, res) => {
-    const userID = req.params.id; 
+// get all groups that this user is a part of
+router.get('/:userID/groups', (req, res) => {
+  const memberID = req.params.userID; 
+  const getGroupMembersQuery = `
+    SELECT Groups.*
+    FROM Groups
+    INNER JOIN GroupMembers
+    ON Groups.groupID = GroupMembers.groupid
+    WHERE GroupMembers.memberid = $1`
+  pool.query(getGroupMembersQuery, [memberID], (err, result) => {
+      if (err) {
+          console.log(err.message); 
+          res.status(400).send('Error getting group members');
+      } else {
+          console.log(`get res: ${result}`); 
+          res.status(200).json({message: "Got all Groups!", groups: result.rows}); 
+      }
+  }); 
+}); 
+
+router.put('/:userID', (req, res) => {
+    const userID = req.params.userID; 
     const body = req.body; 
     const {hasAcceptedTerms, amountOwed, userName, email} = body; 
     const putQuery = `UPDATE Users
@@ -76,8 +96,8 @@ router.put('/:id', (req, res) => {
     }); 
 });
 
-router.delete('/:id', (req, res) => {
-    const userID = req.params.id; 
+router.delete('/:userID', (req, res) => {
+    const userID = req.params.userID; 
     const deleteQuery = `DELETE FROM Users WHERE userID = $1`;
     const checkUserQuery = `SELECT * FROM Users WHERE userID = $1`;
     pool.query(checkUserQuery, [userID]).then((result) => {

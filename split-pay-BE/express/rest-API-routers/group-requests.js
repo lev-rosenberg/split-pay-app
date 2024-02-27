@@ -26,6 +26,7 @@ router.post('/', (req, res) => {
   }); 
 });
 
+// get all groups
 router.get('/', (req, res) => {
     const query = `SELECT * FROM Groups`;
     pool.query(query, (err, result) => {
@@ -39,8 +40,9 @@ router.get('/', (req, res) => {
     });
 });
 
-router.get('/:id', (req, res) => {
-    const groupID = req.params.id; 
+// get the group with this id
+router.get('/:groupID', (req, res) => {
+    const groupID = req.params.groupID; 
     const getGroupQuery = `SELECT * FROM Groups WHERE groupID = $1`
     pool.query(getGroupQuery, [groupID], (err, result) => {
         if(err){
@@ -56,17 +58,37 @@ router.get('/:id', (req, res) => {
     }); 
 });
 
-router.put('/:id', (req, res) => {
+// get all users in this group
+router.get('/:groupID/users', (req, res) => {
+  const memberID = req.params.groupID; 
+  const getGroupMembersQuery = `
+    SELECT Users.*
+    FROM Users
+    INNER JOIN GroupMembers
+    ON Users.userid = GroupMembers.memberid
+    WHERE GroupMembers.groupid = $1`
+  pool.query(getGroupMembersQuery, [memberID], (err, result) => {
+      if (err) {
+          console.log(err.message); 
+          res.status(400).send('Error getting group members');
+      } else {
+          console.log(`get res: ${result}`); 
+          res.status(200).json({message: "Got all users in this group!", users: result.rows}); 
+      }
+  }); 
+}); 
+
+router.put('/:groupID', (req, res) => {
     //get groupID route parameter from url! 
-    const groupID = req.params.id;
+    const groupID = req.params.groupID;
     const body = req.body;
     //destructure from request body the updated field values! 
-    const {leaderID, groupName, hasEveryoneAcceptedTerms, totalOwed} = body; 
+    const {leaderID, groupName, hasEveryoneAcceptedTerms, totalOwed, isCurrent} = body; 
     const putGroupQuery = `UPDATE Groups
-                           SET leaderID = $2, groupName=$3, hasEveryoneAcceptedTerms=$4, totalOwed=$5
+                           SET leaderID = $2, groupName=$3, hasEveryoneAcceptedTerms=$4, totalOwed=$5, isCurrent=$6
                            WHERE groupID = $1`;
     const selectQuery = `SELECT * FROM Groups WHERE groupID = $1`; 
-    const values = [groupID, leaderID, groupName, hasEveryoneAcceptedTerms, totalOwed];
+    const values = [groupID, leaderID, groupName, hasEveryoneAcceptedTerms, totalOwed, isCurrent];
     pool.query(selectQuery, [groupID]).then((result) => {
         if(result.rows.length){
             pool.query(putGroupQuery, values).then( _ => {
@@ -78,12 +100,11 @@ router.put('/:id', (req, res) => {
             res.status(404).json({error: "Can't find group to update!"}); 
         }
     }).catch(err => res.status(400).json({error: err.message})); 
-    
 });
 
-router.delete('/:id', (req , res) => {
+router.delete('/:groupID', (req , res) => {
     //extract groupID from named route parameter to identify group to delete! 
-    const groupID = [req.params.id]; 
+    const groupID = [req.params.groupID]; 
     const selectQuery = `SELECT * FROM Groups WHERE groupid = $1`
     pool.query(selectQuery, groupID).then((result) => {
         const deletedObj = result.rows[0];
