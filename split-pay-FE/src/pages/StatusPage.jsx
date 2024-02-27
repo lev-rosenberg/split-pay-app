@@ -18,24 +18,20 @@ const StatusPage = () => {
     const loc = useLocation();
     const { groupname, totalOwed, iscurrent, leaderid} = loc.state && loc.state.groupData;
     const groupid = loc.state && loc.state.groupId;
-    console.log("group data: ", groupid);
     const { state } = useContext(Context);
     const { userId }  = state ;
     const isLeader = leaderid === userId; 
     useEffect(() => {
         Axios.get(`http://localhost:8000/groups/${groupid}/users`).then(response => {
             const userData = response.data.users;
-            console.log("user data", response.data);
             const users = [];
             for (let i = 0; i < userData.length; i++) {
                 users.push(userData[i]);
             }
-            console.log("users: ", users);
             setGroupMembers(users);
         }).catch(err => console.log(err.message));
         Axios.get(`http://localhost:8000/groups/${groupid}`).then(response => {
             const groupData = response.data.group;
-            console.log(groupData); 
             setHasEveryoneAcceptedTerms(groupData.haseveryoneacceptedterms);
         }).catch(err => console.log(err.message));
     }, [groupid, hasEveryoneAcceptedTerms]);

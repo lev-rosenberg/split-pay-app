@@ -9,14 +9,10 @@ const MemberStatus = ({member, groupid}) => {
 
     function handleChangeAgreed() {
       const user = {groupID: groupid, isLeader: isleader, hasAcceptedTerms: !isAgreed, amountOwed: amountowed};
-      Axios.put(`http://localhost:8000/groupMembers/${userid}`, user).then(response => {
-        console.log("response from groupMember put request: ", response.data);
-      }).catch(err => console.log(err.message));
+      Axios.put(`http://localhost:8000/groupMembers/${userid}`, user).then(response => {}).catch(err => console.log(err.message));
       setIsAgreed(!isAgreed);
     }
-    useEffect(() => {
-      console.log("member: ", member);
-    }, [member]);
+    
     return (<div className={styles["member-status-wrapper"]}>
         <div className={styles["left"]}>
           <button onClick={handleChangeAgreed}>

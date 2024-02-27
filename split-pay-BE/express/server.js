@@ -17,22 +17,6 @@ app.use('/users', usersRouter);
 app.use('/groups', groupsRouter); 
 app.use('/groupMembers', groupMembersRouter); 
 
-
-/*
-pool.query(`CREATE TABLE GroupMembers(
-  groupID TEXT,
-  memberID TEXT,
-  FOREIGN KEY (groupID) REFERENCES Groups(groupID),
-  FOREIGN KEY (memberID) REFERENCES Users(userID)
-)`, (err, res) => {
-    if(err) {
-        console.log(`error: ${err}`); 
-    }
-    else{
-        console.log('created users table'); 
-    }
-}); 
-*/
 /*
 Route Name Conventions we will need to handle(REST paradigm APIs; using resource names):
 1)/users/

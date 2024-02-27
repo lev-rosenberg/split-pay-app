@@ -21,9 +21,7 @@ export default function JoinPage() {
     function handleJoinGroup() {
         // add user to group
         const newGroupMember = {groupID: groupId, memberID: userId, isLeader: false, amountOwed: 0.0, hasAcceptedTerms: false}
-        Axios.post(`http://localhost:8000/groupmembers/`, newGroupMember).then(response => {
-            console.log(`User added to group!`);
-        }).catch(err => console.log(err.message));
+        Axios.post(`http://localhost:8000/groupmembers/`, newGroupMember).then(response => {}).catch(err => console.log(err.message));
         navigate("/status", {state: {groupData: groupData}})
     }
 

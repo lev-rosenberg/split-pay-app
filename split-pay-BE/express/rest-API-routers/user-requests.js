@@ -3,8 +3,6 @@ const router = express.Router();
 const pool = require('../pool.js') 
 
 router.post('/', (req, res) => {
-    console.log("handler for posting user triggered!"); 
-  //parse request body! 
   const body = req.body; 
   const {userID, userName, email} = body; 
   const query = 
@@ -22,7 +20,6 @@ router.post('/', (req, res) => {
       else{
           const getNewInsertedQuery = `SELECT * FROM Users WHERE userID = $1`
           pool.query(getNewInsertedQuery, [userID]).then(result => {
-            console.log(result);
             res.status(201).json({message: "Successfully added new user!", newUser: result.rows[0]});
           }).catch(err => {
             res.status(400).json({error: "Can't add a new user!"}); 
@@ -40,8 +37,6 @@ router.get('/:userID', (req, res) => {
             console.log("error message users: " + err.message); 
             res.status(400).json({error: err.message}); 
         } else{
-            console.log(`res: \n`); 
-            console.log(response.rows[0]); 
             if(!response.rows.length){
                 res.status(404).json({error: `User with id: ${userID} not found!`}); 
                 return; 
@@ -65,7 +60,6 @@ router.get('/:userID/groups', (req, res) => {
           console.log(err.message); 
           res.status(400).send('Error getting group members');
       } else {
-          console.log(`get res: ${result}`); 
           res.status(200).json({message: "Got all Groups!", groups: result.rows}); 
       }
   }); 

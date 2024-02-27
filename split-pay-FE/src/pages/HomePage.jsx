@@ -31,18 +31,14 @@ const HomePage = () => {
         const newGroupMember = {groupID: groupID, memberID: state.userId, isLeader: true, amountOwed: 0.0, hasAcceptedTerms: true}
         Axios.post("http://localhost:8000/groups", newGroup).then(response => {
           // add group-member association to groupMembers table!
-          Axios.post("http://localhost:8000/groupMembers", newGroupMember).then(response => {
-            console.log(response); 
-          }).catch(err => console.log(err.message));
+          Axios.post("http://localhost:8000/groupMembers", newGroupMember).then(response => {}).catch(err => console.log(err.message));
           dispatch({ type: "SET_IS_LEADER", payload: groupID });
         }).catch(err => console.log(err.message)); 
         setIsCreated(true); 
         setGroupLink('https://unique-link-to-group-page'); 
     }
     const handleCopyLink = (linkURL) => {
-        navigator.clipboard.writeText(linkURL).then(()=> {
-            console.log('success'); 
-        }).catch(err => console.log(err.message)); 
+        navigator.clipboard.writeText(linkURL).then(()=> {}).catch(err => console.log(err.message)); 
         window.alert("successfully copied to your clipboard"); 
     }
     return (

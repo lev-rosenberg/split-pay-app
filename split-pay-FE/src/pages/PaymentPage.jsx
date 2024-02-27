@@ -20,10 +20,8 @@ function PaymentPage() {
     const [customAmounts, setCustomAmounts] = useState({});
     const groupData = loc.state && loc.state.groupData; 
     useEffect(() => {
-      console.log(groupData);
       Axios.get(`http://localhost:8000/groups/${groupData.groupid}/users`).then(response => {
         const userData = response.data.users;
-        console.log("user data", userData);
         const users = [];
         for (let i = 0; i < userData.length; i++) {
           users.push(userData[i]);
@@ -50,25 +48,18 @@ function PaymentPage() {
         for (let i = 0; i < groupMembers.length; i++) {
           const {userid} = groupMembers[i];
           const amountOwed = formFields["strategy"] === "equal" ? equalAmount : customAmounts[userid];
-          console.log("amount owed: ", amountOwed);
           const groupMember = {groupID: groupData.groupid, isLeader: true, hasAcceptedTerms: false, amountOwed: amountOwed};
-          Axios.put(`http://localhost:8000/groupMembers/${userid}`, groupMember).then(response => {  
-            console.log("response from user put request: ", response.data);
-          }).catch(err => console.log(err.message));
+          Axios.put(`http://localhost:8000/groupMembers/${userid}`, groupMember).then(response => {}).catch(err => console.log(err.message));
         }
         const {groupid, leaderid, groupname, iscurrent} = groupData;
-        console.log(`formFields[amount]: ${formFields["amount"]}`)
         const group = {leaderID: leaderid, groupName: groupname, hasEveryoneAcceptedTerms: false, totalOwed: formFields["amount"], iscurrent: iscurrent};
-        Axios.put(`http://localhost:8000/groups/${groupid}`, group).then(response => {
-          console.log("response from group put request: ", response.data);
-        }).catch(err => console.log(err.message));
+        Axios.put(`http://localhost:8000/groups/${groupid}`, group).then(response => {}).catch(err => console.log(err.message));
         navigate("/status", {state: {groupData: group, groupId: groupid}}); 
     }
     function handleCustomAmounts(groupname, e) {
         const newState = {...customAmounts}; 
         newState[groupname] = e.target.value; 
         setCustomAmounts(newState);
-        console.log(customAmounts);
     }
     return (
         <div className={styles["payment-page-container"]}>

@@ -6,7 +6,6 @@ router.post('/', (req, res) => {
   //parse request body! 
   const body = req.body; 
   const {groupID, leaderID, groupName, hasEveryoneAcceptedTerms, totalOwed, isCurrent} = body; 
-  console.log(`groupID: ${groupID}`); 
   const query = 'INSERT INTO Groups(groupID, leaderID, groupName, hasEveryoneAcceptedTerms, totalOwed, isCurrent) VALUES ($1, $2, $3, $4, $5, $6)'
   const values = [groupID, leaderID, groupName, hasEveryoneAcceptedTerms, totalOwed, isCurrent]
   pool.query(query, values, (err, result) => {
@@ -34,7 +33,6 @@ router.get('/', (req, res) => {
             console.log(err.message); 
             res.status(400).json({error: err.message}); 
         } else {
-            console.log(`res: ${result.rows}`);
             res.status(200).json({message: "Succesfully got all groups!", groups: result.rows})
         }
     });
@@ -49,10 +47,6 @@ router.get('/:groupID', (req, res) => {
             console.log(err.message); 
             res.status(400).json({error: err.message}); 
         } else {
-            console.log(`res: ${result.rows[0]}`); 
-            // if(!result.rows[0]){
-            //     res.status(404).json({error: `No group with id: ${groupID} found!`}); 
-            // }
             res.status(200).json({message: "Succesfully got group!", group: result.rows[0]})
         }
     }); 
