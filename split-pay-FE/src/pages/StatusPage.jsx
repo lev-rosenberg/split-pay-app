@@ -21,6 +21,7 @@ const StatusPage = () => {
     const { userId }  = state ;
     const isLeader = leaderid === userId; 
     const totalowed = groupMembers.reduce((prev, cur) => prev + cur.amountowed, 0)
+
     const fetchGroupInfo = () => {
         console.log("fetching latest group info...");
         Axios.get(`http://localhost:8000/groups/${groupid}/users`).then(response => {
@@ -73,7 +74,7 @@ const StatusPage = () => {
                 <p>Total Owed: ${totalowed} </p>
             </div>
             {console.log("is", iscurrent && (isLeader) && hasEveryoneAcceptedTerms)}
-            {iscurrent && (isLeader) && hasEveryoneAcceptedTerms && <button type="button">Finish Pay</button>} 
+            {iscurrent && isLeader && hasEveryoneAcceptedTerms && <button type="button">Finish Pay</button>} 
         </div>  
     ); 
 };

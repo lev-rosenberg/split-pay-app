@@ -31,17 +31,10 @@
     background-color: #E2DDEC;
 }
 
-.current-group {
+.groups-list {
     display: flex;
     justify-content: center;
     flex-direction: column;
     width: 100%;
-}
-
-.all-groups {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    width: 100%;
-    gap: 1rem;
+    gap: 0.5rem;
 }

@@ -4,12 +4,6 @@ import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 import styles from "../module-styles/GroupsPage.module.css"; 
 
-/* 
-------- TO DO ------- 
-1. frontend: differentiate between groups you are leader of and groups you are not leader of                                                                    
-2. frontend: only navigate to payment page if you are leader of group, otherwise go to status page?
-*/
-
 const GroupsPage = () => {
     const navigate = useNavigate(); 
     const [curGroups, setCurGroups] = useState([]); 
@@ -20,6 +14,7 @@ const GroupsPage = () => {
     useEffect(() => {
       Axios.get(`http://localhost:8000/users/${userId}/groups`).then(response => {
         const groupsData = response.data.groups;
+        console.log("groupsData: ", groupsData)
         const curGroups = [];
         const allGroups = [];
         for (let i = 0; i < groupsData.length; i++) {
@@ -39,7 +34,7 @@ const GroupsPage = () => {
     const handleInitiatePaymentSplit = (group) => {
         const {leaderid}=group; 
         //if user clicked on group for which they are leader, transition to 
-        if(leaderid === userId){
+        if(leaderid === userId && group.iscurrent){
            //switch route to status to show in real-time status page for this specific group! 
            navigate("/payment", {state: {groupData: group}}); 
         } 
@@ -51,8 +46,8 @@ const GroupsPage = () => {
     return (
         <div className={styles["groups-container"]}>
             <h1>Your Groups</h1>
-            <h5>Current Group:</h5>
-            <div className={styles["current-group"]}>
+            <h5>Current Groups:</h5>
+            <div className={styles["groups-list"]}>
                 {curGroups.map((cg, idx) => (
                     <div 
                       key = {'c' + idx} 
@@ -63,8 +58,8 @@ const GroupsPage = () => {
                     </div>
                 ))}
             </div>
-            <h5>All Groups:</h5>
-            <div className={styles["all-groups"]}>
+            <h5>Previous Groups:</h5>
+            <div className={styles["groups-list"]}>
                 {prevGroups.map((ag, idx) => (
                   <div 
                     key = {'a' + idx} 
