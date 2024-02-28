@@ -19,19 +19,14 @@ const StatusPage = () => {
     const navigate = useNavigate(); 
     const [groupMembers, setGroupMembers] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    console.log(`groupMembers state: \n`)
-    console.log(groupMembers)
     //const [hasEveryoneAcceptedTerms, setHasEveryoneAcceptedTerms] = useState(false);
     const loc = useLocation();
     const { groupid, groupname, iscurrent, leaderid} = loc.state && loc.state.groupData;
     const { state } = useContext(Context);
     const { userId }  = state ;
-    console.log(`leaderId of group: ${leaderid}`); 
-    console.log(`cur user id: ${userId}`); 
     const isLeader = leaderid === userId; 
     const totalowed = groupMembers.reduce((prev, cur) => prev + cur.amountowed, 0);
     const hasEveryoneAcceptedTerms = groupMembers.reduce((prev, cur) => prev & cur.hasacceptedterms, true); 
-    console.log(`hasEveryoneAcceptedTerms: ${hasEveryoneAcceptedTerms}`)
     const fetchGroupInfo = () => {
         console.log("fetching latest group info...");
         Axios.get(`http://localhost:8000/groups/${groupid}/users`).then(response => {
