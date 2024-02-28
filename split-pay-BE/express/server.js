@@ -22,6 +22,10 @@ wss.on('connection', (ws) => {
        //now broadcast the update event so that every member of group can see how much they owe for real-time! 
       wss.clients.forEach(client => client.send(JSON.stringify({event: 'update'}))); 
     }
+    if(data.event === 'status-changed'){
+      console.log(`received status change for user: ${data.userid}`)
+      wss.clients.forEach(client => client.send(JSON.stringify({event: 'update'}))); 
+    }
   });
   ws.send(JSON.stringify({event: 'connected', message: "Websocket conn established..."})); 
 }); 

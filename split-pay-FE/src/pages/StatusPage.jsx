@@ -14,14 +14,19 @@ import { Context } from "../contexts/userContext";
 
 const StatusPage = () => {
     const [groupMembers, setGroupMembers] = useState([]);
-    const [hasEveryoneAcceptedTerms, setHasEveryoneAcceptedTerms] = useState(false);
+    console.log(`groupMembers state: \n`)
+    console.log(groupMembers)
+    //const [hasEveryoneAcceptedTerms, setHasEveryoneAcceptedTerms] = useState(false);
     const loc = useLocation();
     const { groupid, groupname, iscurrent, leaderid} = loc.state && loc.state.groupData;
     const { state } = useContext(Context);
     const { userId }  = state ;
+    console.log(`leaderId of group: ${leaderid}`); 
+    console.log(`cur user id: ${userId}`); 
     const isLeader = leaderid === userId; 
-    const totalowed = groupMembers.reduce((prev, cur) => prev + cur.amountowed, 0)
-
+    const totalowed = groupMembers.reduce((prev, cur) => prev + cur.amountowed, 0);
+    const hasEveryoneAcceptedTerms = groupMembers.reduce((prev, cur) => prev & cur.hasacceptedterms, true); 
+    console.log(`hasEveryoneAcceptedTerms: ${hasEveryoneAcceptedTerms}`)
     const fetchGroupInfo = () => {
         console.log("fetching latest group info...");
         Axios.get(`http://localhost:8000/groups/${groupid}/users`).then(response => {
@@ -34,7 +39,7 @@ const StatusPage = () => {
         }).catch(err => console.log(err.message));
         Axios.get(`http://localhost:8000/groups/${groupid}`).then(response => {
             const groupData = response.data.group;
-            setHasEveryoneAcceptedTerms(groupData.haseveryoneacceptedterms);
+            //setHasEveryoneAcceptedTerms(groupData.haseveryoneacceptedterms);
         }).catch(err => console.log(err.message));
     };
     const handleWebSocketMessage = (event) => {
@@ -73,8 +78,8 @@ const StatusPage = () => {
             <div className={styles["total-owed"]}>
                 <p>Total Owed: ${totalowed} </p>
             </div>
-            {console.log("is", iscurrent && (isLeader) && hasEveryoneAcceptedTerms)}
-            {iscurrent && isLeader && hasEveryoneAcceptedTerms && <button type="button">Finish Pay</button>} 
+            {console.log(`iscurrent: ${iscurrent}, isLeader: ${isLeader}, hasEveryoneAcceptedTerms: ${hasEveryoneAcceptedTerms}`)}
+            {(iscurrent && isLeader && hasEveryoneAcceptedTerms) ? <button type="button">Finish Pay</button> : null} 
         </div>  
     ); 
 };
