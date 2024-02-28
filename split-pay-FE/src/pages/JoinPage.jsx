@@ -8,8 +8,9 @@ export default function JoinPage() {
     const { userId } = state;
     const { groupID } = useParams();
     const [groupData, setGroupData] = useState({});
+    console.log(`groupDATA: \n`);
+    console.log(groupData);  
     const navigate = useNavigate();
-    
     useEffect(() => {
         Axios.get(`http://localhost:8000/groups/${groupID}`).then(response => {
             const groupData = response.data.group;
@@ -21,8 +22,12 @@ export default function JoinPage() {
     function handleJoinGroup() {
         // add user to group
         const newGroupMember = {groupID: groupID, memberID: userId, isLeader: false, amountOwed: 0.0, hasAcceptedTerms: false}
-        Axios.post(`http://localhost:8000/groupmembers/`, newGroupMember).then(response => {}).catch(err => console.log(err.message));
-        navigate("/status", {state: {groupData: groupData}})
+        //only add new member to group if it's not a leader for the given group! The leader should already be in the GroupMembers table 
+        //by the time group join link got created!
+        if(groupData.leaderid !== userId){
+            Axios.post(`http://localhost:8000/groupmembers/`, newGroupMember).then(response => {}).catch(err => console.log(err.message));
+            navigate("/status", {state: {groupData: groupData}})
+        }
     }
 
     return (
