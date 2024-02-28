@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styles from "../module-styles/StatusPage.module.css"; 
 import MemberStatus from "../components/MemberStatus"; 
 import Axios from "axios";
 import { Context } from "../contexts/userContext";
 import Modal from "../components/Modal";
 import CreditCardImage from "../CreditCardCropped.png"
+import axios from "axios"; 
 /* 
 ------- TO DO ------- 
 1. backend: incorporate websocket to update status page in real-time
@@ -15,6 +16,7 @@ import CreditCardImage from "../CreditCardCropped.png"
 */
 
 const StatusPage = () => {
+    const navigate = useNavigate(); 
     const [groupMembers, setGroupMembers] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     console.log(`groupMembers state: \n`)
@@ -57,6 +59,17 @@ const StatusPage = () => {
             fetchGroupInfo(); 
         }
     }
+    const handleActiveChange = async (event) => {
+        try {
+            const newGroup = {leaderID: leaderid, groupName: groupname, hasEveryoneAcceptedTerms: hasEveryoneAcceptedTerms, totalOwed: totalowed, isCurrent: true}; 
+            //wait for DB update to update group's state to active group! 
+            await axios.put(`http://localhost:8000/groups/${groupid}`, newGroup); 
+            window.alert(`Group ${groupname} is now active!`);
+            navigate("/groups"); 
+        } catch(err){
+            console.log(`Failed to update group to be active again!`); 
+        }
+    }
     useEffect(() => {
         //set up ws connection to back-end server! 
         const ws = new WebSocket('ws://localhost:8000'); 
@@ -89,6 +102,7 @@ const StatusPage = () => {
             </div>
             {console.log(`iscurrent: ${iscurrent}, isLeader: ${isLeader}, hasEveryoneAcceptedTerms: ${hasEveryoneAcceptedTerms}`)}
             {(iscurrent && isLeader && hasEveryoneAcceptedTerms) ? <button type="button" onClick={toggleModal}>Finish Pay</button> : null} 
+            {!iscurrent && <button onClick={handleActiveChange}>Make Group Active!</button>}
             <Modal isOpen={isModalOpen} onClose={toggleModal}>
                 <img style={rotateStyle}src={CreditCardImage} alt="Credit Card for NFC Payment" />     
             </Modal>
