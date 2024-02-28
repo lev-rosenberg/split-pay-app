@@ -29,10 +29,8 @@ function PaymentPage() {
         setGroupMembers(users);
       }).catch(err => console.log(err.message));
     }, [groupData]); 
-
     const groupSize = groupMembers.length;  
     const equalAmount = formFields["strategy"] === "equal" && (formFields["amount"] / groupSize).toFixed(2); 
-    
     const updateFormFields = (field, e) => {
         const newState = {...formFields}; 
         let newVal = e.target.value
@@ -43,18 +41,31 @@ function PaymentPage() {
         setFormFields(newState); 
     }
 
-    const handlePaymentStart = () => {
+    const handlePaymentStart = async () => {
+      try {
+        //array of promise objects so we get DB calls done before intiating websocket event! 
+        const dbUpdatePromises = []; 
         //transition over to see real-time status updates for each member of group! 
         for (let i = 0; i < groupMembers.length; i++) {
           const {userid} = groupMembers[i];
           const amountOwed = formFields["strategy"] === "equal" ? equalAmount : customAmounts[userid];
           const groupMember = {groupID: groupData.groupid, isLeader: true, hasAcceptedTerms: false, amountOwed: amountOwed};
-          Axios.put(`http://localhost:8000/groupMembers/${userid}`, groupMember).then(response => {}).catch(err => console.log(err.message));
+          dbUpdatePromises.push(Axios.put(`http://localhost:8000/groupMembers/${userid}`, groupMember))
         }
         const {groupid, leaderid, groupname, iscurrent} = groupData;
         const group = {leaderID: leaderid, groupName: groupname, hasEveryoneAcceptedTerms: false, totalOwed: formFields["amount"], isCurrent: iscurrent};
-        Axios.put(`http://localhost:8000/groups/${groupid}`, group).then(response => {}).catch(err => console.log(err.message));
+        dbUpdatePromises.push(Axios.put(`http://localhost:8000/groups/${groupid}`, group));
+        //wait for all db updates to go through! 
+        await Promise.all(dbUpdatePromises); 
+        const ws = new WebSocket('ws://localhost:8000')
+        ws.onopen = () => {
+          ws.send(JSON.stringify({event: 'initiate-payment', groupid: groupid})); 
+        }; 
         navigate("/status", {state: {groupData: groupData}}); 
+      }
+      catch(err){
+        console.log(`Error message while handling initiation of payment: ${err.message}`); 
+      }
     }
     function handleCustomAmounts(groupname, e) {
         const newState = {...customAmounts}; 

@@ -19,6 +19,7 @@ const ProfilePage = () => {
     const [userData, setUserData] = useState({});
 
     const logOutHandler = () => {
+        console.log("logouthandler invoked!")
         googleLogout();
         localStorage.removeItem('split-pay-login-token');
         dispatch({ type: "SET_SIGNED_IN", payload: false });

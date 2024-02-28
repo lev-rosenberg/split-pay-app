@@ -8,8 +8,6 @@ export default function JoinPage() {
     const { userId } = state;
     const { groupID } = useParams();
     const [groupData, setGroupData] = useState({});
-    console.log(`groupDATA: \n`);
-    console.log(groupData);  
     const navigate = useNavigate();
     useEffect(() => {
         Axios.get(`http://localhost:8000/groups/${groupID}`).then(response => {

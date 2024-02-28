@@ -16,11 +16,13 @@ const StatusPage = () => {
     const [groupMembers, setGroupMembers] = useState([]);
     const [hasEveryoneAcceptedTerms, setHasEveryoneAcceptedTerms] = useState(false);
     const loc = useLocation();
-    const { groupid, groupname, totalOwed, iscurrent, leaderid} = loc.state && loc.state.groupData;
+    const { groupid, groupname, iscurrent, leaderid} = loc.state && loc.state.groupData;
     const { state } = useContext(Context);
     const { userId }  = state ;
     const isLeader = leaderid === userId; 
-    useEffect(() => {
+    const totalowed = groupMembers.reduce((prev, cur) => prev + cur.amountowed, 0)
+    const fetchGroupInfo = () => {
+        console.log("fetching latest group info...");
         Axios.get(`http://localhost:8000/groups/${groupid}/users`).then(response => {
             const userData = response.data.users;
             const users = [];
@@ -33,6 +35,32 @@ const StatusPage = () => {
             const groupData = response.data.group;
             setHasEveryoneAcceptedTerms(groupData.haseveryoneacceptedterms);
         }).catch(err => console.log(err.message));
+    };
+    const handleWebSocketMessage = (event) => {
+        console.log(`handleWebSocketMessage fired!`); 
+        console.log('event: '); 
+        console.log(event)
+        const data = JSON.parse(event.data);
+        if(data.event === 'update'){
+            //refetch group info upon receiving update event, which is only sent by ws server upon receiving "initiate-payment"
+            //event from leader! 
+            console.log('received update event...'); 
+            fetchGroupInfo(); 
+        }
+    }
+    useEffect(() => {
+        //set up ws connection to back-end server! 
+        const ws = new WebSocket('ws://localhost:8000'); 
+        ws.onopen = () => {
+            ws.send(JSON.stringify({event: 'subscribe', groupid: groupid, userid: userId}))
+        }
+        ws.onmessage = handleWebSocketMessage; 
+        //for initial mount, we need to fetch data first! 
+        fetchGroupInfo(); 
+        //return cleanup function that will close down web-socket connection to prevent memory leak! 
+        return () => {
+            ws.close(); 
+        }
     }, [groupid, hasEveryoneAcceptedTerms]);
     return (
         <div className={styles["status-wrapper"]}>
@@ -42,7 +70,7 @@ const StatusPage = () => {
                 {groupMembers.map((gm, idx) => <MemberStatus key={idx} member={gm} groupid = {groupid}/> )}
             </div>
             <div className={styles["total-owed"]}>
-                <p>Total Owed: ${totalOwed} </p>
+                <p>Total Owed: ${totalowed} </p>
             </div>
             {console.log("is", iscurrent && (isLeader) && hasEveryoneAcceptedTerms)}
             {iscurrent && (isLeader) && hasEveryoneAcceptedTerms && <button type="button">Finish Pay</button>} 
