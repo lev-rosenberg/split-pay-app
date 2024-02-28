@@ -4,6 +4,8 @@ import styles from "../module-styles/StatusPage.module.css";
 import MemberStatus from "../components/MemberStatus"; 
 import Axios from "axios";
 import { Context } from "../contexts/userContext";
+import Modal from "../components/Modal";
+import CreditCardImage from "../CreditCardCropped.png"
 /* 
 ------- TO DO ------- 
 1. backend: incorporate websocket to update status page in real-time
@@ -14,6 +16,7 @@ import { Context } from "../contexts/userContext";
 
 const StatusPage = () => {
     const [groupMembers, setGroupMembers] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     console.log(`groupMembers state: \n`)
     console.log(groupMembers)
     //const [hasEveryoneAcceptedTerms, setHasEveryoneAcceptedTerms] = useState(false);
@@ -68,6 +71,12 @@ const StatusPage = () => {
             ws.close(); 
         }
     }, [groupid, hasEveryoneAcceptedTerms]);
+    const toggleModal = () => setIsModalOpen(!isModalOpen);
+    const rotateStyle = {
+        transform: 'rotate(90deg)',
+        height: "300px"
+      };
+
     return (
         <div className={styles["status-wrapper"]}>
             <h3>Status of {groupname}</h3>
@@ -79,7 +88,10 @@ const StatusPage = () => {
                 <p>Total Owed: ${totalowed} </p>
             </div>
             {console.log(`iscurrent: ${iscurrent}, isLeader: ${isLeader}, hasEveryoneAcceptedTerms: ${hasEveryoneAcceptedTerms}`)}
-            {(iscurrent && isLeader && hasEveryoneAcceptedTerms) ? <button type="button">Finish Pay</button> : null} 
+            {(iscurrent && isLeader && hasEveryoneAcceptedTerms) ? <button type="button" onClick={toggleModal}>Finish Pay</button> : null} 
+            <Modal isOpen={isModalOpen} onClose={toggleModal}>
+                <img style={rotateStyle}src={CreditCardImage} alt="Credit Card for NFC Payment" />     
+            </Modal>
         </div>  
     ); 
 };
