@@ -17,6 +17,7 @@ const ProfilePage = () => {
     const { userId } = state;
     const [isEditing, setIsEditing] = useState(false);
     const [userData, setUserData] = useState({});
+    const [editableUserData, setEditableUserData] = useState({});
 
     const logOutHandler = () => {
         console.log("logouthandler invoked!")
@@ -30,16 +31,39 @@ const ProfilePage = () => {
         Axios.get(`http://localhost:8000/users/${userId}`).then(response => {
             const userData = response.data.user;
             setUserData(userData);
+            setEditableUserData(userData); 
         }).catch(err => console.log(err.message));
     }, [userId, isEditing]);
     const toggleEditSaveHandler = () => {
-        if (isEditing) {
-            console.log(`save profile called`);
-        } else {
-            console.log(`edit profile called`);
-        }
-        setIsEditing(!isEditing); 
+    if (isEditing) {
+        console.log(`save profile called`);
+        Axios.put(`http://localhost:8000/users/${userId}`, {
+            userName: editableUserData.username, 
+            email: editableUserData.email,
+        })
+            .then(response => {
+                setUserData(editableUserData);
+            })
+            .catch(error => {
+                console.error("Error updating profile:", error);
+                alert("Failed to update profile. Please try again."); 
+            });
+    } else {
+        console.log(`edit profile called`);
+        setEditableUserData(userData); 
+    }
+    setIsEditing(!isEditing);
+};
+
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setEditableUserData(prev => ({
+            ...prev,
+            [name]: value,
+        }));
     };
+
     return (
         <div className={styles["profile-wrapper"]}>
             <ProfileIcon imgUrl="images/logo192.png"></ProfileIcon>
@@ -51,12 +75,31 @@ const ProfilePage = () => {
                 {isEditing ? 'Save' : 'Edit Profile'}
             </button>
             <div className={styles["column"]}>
-                <span>Name: {userData.username}</span>
-                <span>Email: {userData.email}</span>
+                {isEditing ? (
+                    <>
+                        <input
+                            type="text"
+                            name="username"
+                            value={editableUserData.username}
+                            onChange={handleChange}
+                        />
+                        <input
+                            type="email"
+                            name="email"
+                            value={editableUserData.email}
+                            onChange={handleChange}
+                        />
+                    </>
+                ) : (
+                    <>
+                        <span>Name: {userData.username}</span>
+                        <span>Email: {userData.email}</span>
+                    </>
+                )}
             </div>
-            <button onClick = {logOutHandler} className={styles["log-out"]}type="button">Log-Out</button>
+            <button onClick={logOutHandler} className={styles["log-out"]} type="button">Log-Out</button>
         </div>
-    ); 
+    );
 }
 
 export default ProfilePage; 
