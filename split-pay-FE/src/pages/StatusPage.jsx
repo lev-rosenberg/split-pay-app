@@ -28,7 +28,6 @@ const StatusPage = () => {
     const totalowed = groupMembers.reduce((prev, cur) => prev + cur.amountowed, 0);
     const hasEveryoneAcceptedTerms = groupMembers.reduce((prev, cur) => prev & cur.hasacceptedterms, true); 
     const fetchGroupInfo = () => {
-        console.log("fetching latest group info...");
         Axios.get(`http://localhost:8000/groups/${groupid}/users`).then(response => {
             const userData = response.data.users;
             const users = [];
@@ -44,10 +43,9 @@ const StatusPage = () => {
     };
     const handleWebSocketMessage = (event) => {
         console.log(`handleWebSocketMessage fired!`); 
-        console.log('event: '); 
-        console.log(event)
+        console.log('event: ', event); 
         const data = JSON.parse(event.data);
-        if(data.event === 'update'){
+        if(data.event === 'update') {
             //refetch group info upon receiving update event, which is only sent by ws server upon receiving "initiate-payment"
             //event from leader! 
             console.log('received update event...'); 
@@ -95,7 +93,6 @@ const StatusPage = () => {
             <div className={styles["total-owed"]}>
                 <p>Total Owed: ${totalowed} </p>
             </div>
-            {console.log(`iscurrent: ${iscurrent}, isLeader: ${isLeader}, hasEveryoneAcceptedTerms: ${hasEveryoneAcceptedTerms}`)}
             {(iscurrent && isLeader && hasEveryoneAcceptedTerms) ? <button type="button" onClick={toggleModal}>Finish Pay</button> : null} 
             {!iscurrent && <button onClick={handleActiveChange}>Make Group Active!</button>}
             <Modal isOpen={isModalOpen} onClose={toggleModal}>

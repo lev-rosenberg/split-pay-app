@@ -12,7 +12,6 @@ export default function JoinPage() {
     useEffect(() => {
         Axios.get(`http://localhost:8000/groups/${groupID}`).then(response => {
             const groupData = response.data.group;
-            console.log("response", response.data);
             setGroupData(groupData);
         }).catch(err => console.log(err.message));
     }, [groupID]);

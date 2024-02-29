@@ -5,8 +5,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import styles from "../module-styles/MemberStatus.module.css"; 
 import Axios from "axios";
 const MemberStatus = ({member, groupid}) => {
-    console.log(`memberstaus comp...`)
-    console.log(member); 
     const {userid, isleader, amountowed, username, hasacceptedterms } = member;
     const [isAgreed, setIsAgreed] = useState(hasacceptedterms); 
     const { state } = useContext(Context);

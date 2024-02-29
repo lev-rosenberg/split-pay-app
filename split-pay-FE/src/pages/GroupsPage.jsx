@@ -14,7 +14,6 @@ const GroupsPage = () => {
     useEffect(() => {
       Axios.get(`http://localhost:8000/users/${userId}/groups`).then(response => {
         const groupsData = response.data.groups;
-        console.log("groupsData: ", groupsData)
         const curGroups = [];
         const allGroups = [];
         for (let i = 0; i < groupsData.length; i++) {
