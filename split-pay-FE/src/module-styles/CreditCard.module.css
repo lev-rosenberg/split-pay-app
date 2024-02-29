@@ -1,0 +1,63 @@
+@font-face {
+    font-family: 'OCR-A';
+    src: url('../OCR/OCR.otf') format('truetype'); 
+  }  
+ .creditCardLogo {
+    width: 110px; 
+    height: auto; 
+  }
+
+.creditCard {
+    font-family: 'OCR-A', monospace;
+    font-weight: 200;
+    background: linear-gradient(25deg, #6D7E8A, #9BAABF);
+    color: #FFFFFF;
+    width: 340px;
+    height: 220px;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .creditCardTop {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  
+  .creditCardChip {
+    width: 50px;
+    height: 40px;
+    background-image: url('../ChipImageCrop.png'); 
+    background-size: cover;
+    position: relative;
+    left: 8%;
+    top: 100%;
+  }
+  
+  .creditCardLogo {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .creditCardNumber {
+    font-size: 20px;
+    letter-spacing: 4px;
+    text-align: center;
+  }
+  
+  .creditCardInfo {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .creditCardName,
+  .creditCardExpiry {
+    font-size: 16px;
+  }
+  
