@@ -6,7 +6,7 @@ import Axios from "axios";
 import { Context } from "../contexts/userContext";
 import Modal from "../components/Modal";
 import CreditCardImage from "../CreditCardCropped.png"
-import axios from "axios"; 
+import CreditCard from "../components/CreditCard";
 /* 
 ------- TO DO ------- 
 1. backend: incorporate websocket to update status page in real-time
@@ -19,6 +19,9 @@ const StatusPage = () => {
     const navigate = useNavigate(); 
     const [groupMembers, setGroupMembers] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [UserData, setUserData] = useState({username: "Loading..."});
+    console.log(`groupMembers state: \n`)
+    console.log(groupMembers)
     //const [hasEveryoneAcceptedTerms, setHasEveryoneAcceptedTerms] = useState(false);
     const loc = useLocation();
     const { groupid, groupname, iscurrent, leaderid} = loc.state && loc.state.groupData;
@@ -40,6 +43,10 @@ const StatusPage = () => {
             const groupData = response.data.group;
             //setHasEveryoneAcceptedTerms(groupData.haseveryoneacceptedterms);
         }).catch(err => console.log(err.message));
+        Axios.get(`http://localhost:8000/users/${userId}`).then(response => {
+            const userData = response.data.user;
+            setUserData(userData);
+        }).catch(err => console.log(err.message));
     };
     const handleWebSocketMessage = (event) => {
         console.log(`handleWebSocketMessage fired!`); 
@@ -56,13 +63,14 @@ const StatusPage = () => {
         try {
             const newGroup = {leaderID: leaderid, groupName: groupname, hasEveryoneAcceptedTerms: hasEveryoneAcceptedTerms, totalOwed: totalowed, isCurrent: true}; 
             //wait for DB update to update group's state to active group! 
-            await axios.put(`http://localhost:8000/groups/${groupid}`, newGroup); 
+            await Axios.put(`http://localhost:8000/groups/${groupid}`, newGroup); 
             window.alert(`Group ${groupname} is now active!`);
             navigate("/groups"); 
         } catch(err){
             console.log(`Failed to update group to be active again!`); 
         }
     }
+    
     useEffect(() => {
         //set up ws connection to back-end server! 
         const ws = new WebSocket('ws://localhost:8000'); 
@@ -76,11 +84,16 @@ const StatusPage = () => {
         return () => {
             ws.close(); 
         }
-    }, [groupid, hasEveryoneAcceptedTerms]);
+    }, [groupid, hasEveryoneAcceptedTerms, userId]);
     const toggleModal = () => setIsModalOpen(!isModalOpen);
     const rotateStyle = {
         transform: 'rotate(90deg)',
         height: "300px"
+      };
+      const cardInfo = {
+        name: UserData.username,
+        number: '1234 5678 9012 3456',
+        expiry: '12/25',
       };
 
     return (
@@ -96,7 +109,8 @@ const StatusPage = () => {
             {(iscurrent && isLeader && hasEveryoneAcceptedTerms) ? <button type="button" onClick={toggleModal}>Finish Pay</button> : null} 
             {!iscurrent && <button onClick={handleActiveChange}>Make Group Active!</button>}
             <Modal isOpen={isModalOpen} onClose={toggleModal}>
-                <img style={rotateStyle}src={CreditCardImage} alt="Credit Card for NFC Payment" />     
+                {cardInfo && <CreditCard cardInfo={cardInfo} />}
+                {/* <img style={rotateStyle}src={CreditCardImage} alt="Credit Card for NFC Payment" />      */}
             </Modal>
         </div>  
     ); 
