@@ -85,7 +85,12 @@ const StatusPage = () => {
             ws.close(); 
         }
     }, [groupid, hasEveryoneAcceptedTerms, userId]);
-    const toggleModal = () => setIsModalOpen(!isModalOpen);
+    const handlePaymentSubmit = async () =>{
+        setIsModalOpen(!isModalOpen);
+        const updatedGroup = {leaderID: leaderid, groupName: groupname, hasEveryoneAcceptedTerms: hasEveryoneAcceptedTerms, totalOwed: totalowed, isCurrent: false}; 
+        await Axios.put(`http://localhost:8000/groups/${groupid}`,updatedGroup); 
+        window.alert("Payment submitted!"); 
+    } 
     const rotateStyle = {
         transform: 'rotate(90deg)',
         height: "300px"
@@ -106,9 +111,9 @@ const StatusPage = () => {
             <div className={styles["total-owed"]}>
                 <p>Total Owed: ${totalowed} </p>
             </div>
-            {(iscurrent && isLeader && hasEveryoneAcceptedTerms) ? <button type="button" onClick={toggleModal}>Finish Pay</button> : null} 
+            {(iscurrent && isLeader && hasEveryoneAcceptedTerms) ? <button type="button" onClick={handlePaymentSubmit}>Finish Pay</button> : null} 
             {!iscurrent && <button onClick={handleActiveChange}>Make Group Active!</button>}
-            <Modal isOpen={isModalOpen} onClose={toggleModal}>
+            <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(prev => !prev)}>
                 {cardInfo && <CreditCard cardInfo={cardInfo} />}
                 {/* <img style={rotateStyle}src={CreditCardImage} alt="Credit Card for NFC Payment" />      */}
             </Modal>
