@@ -32,7 +32,7 @@ wss.on('connection', (ws) => {
 app.use(express.json());
 // app.use(cors())
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: 'http://localhost:3000, https://split-pay.onrender.com',
 })); 
 //let userRouter defined handler methods handle all API requests coming to '/users'!
 app.use('/users', usersRouter); 
