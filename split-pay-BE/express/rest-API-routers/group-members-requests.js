@@ -61,17 +61,48 @@ router.put('/:id', (req, res) => {
     }); 
 });
 
+// router.delete('/:id', (req, res) => {
+//   const groupID = req.params.id;
+//   const deleteQuery = `DELETE FROM GroupMembers WHERE groupid = $1`;
+//   pool.query(deleteQuery, [groupID], (err, result) => {
+//       if (err) {
+//           console.log(err.message);
+//           res.status(400).send('Error deleting group members');
+//       } else {
+//           res.status(200).json({ message: 'Group members deleted successfully' });
+//       }
+//   });
+// });
+
 router.delete('/:id', (req, res) => {
-  const groupID = req.params.id;
-  const deleteQuery = `DELETE FROM GroupMembers WHERE groupid = $1`;
-  pool.query(deleteQuery, [groupID], (err, result) => {
+    const groupID = req.params.id;
+  
+    pool.query('BEGIN', async (err) => {
       if (err) {
-          console.log(err.message);
-          res.status(400).send('Error deleting group members');
-      } else {
-          res.status(200).json({ message: 'Group members deleted successfully' });
+        console.log(err.message);
+        return res.status(500).send('Error starting transaction');
       }
+
+      const deleteMembersQuery = 'DELETE FROM GroupMembers WHERE groupid = $1';
+      try {
+        await pool.query(deleteMembersQuery, [groupID]);
+      } catch (err) {
+        console.log(err.message);
+        await pool.query('ROLLBACK');
+        return res.status(400).send('Error deleting group members');
+      }
+      const deleteGroupQuery = 'DELETE FROM Groups WHERE groupID = $1';
+      try {
+        await pool.query(deleteGroupQuery, [groupID]);
+        await pool.query('COMMIT');
+        res.status(200).json({ message: 'Group and group members deleted successfully' });
+      } catch (err) {
+        console.log(err.message);
+        await pool.query('ROLLBACK');
+        return res.status(400).send('Error deleting the group');
+      }
+    });
   });
-});
+  
 
 module.exports = router; 

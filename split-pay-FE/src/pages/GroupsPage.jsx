@@ -42,6 +42,15 @@ const GroupsPage = () => {
           navigate("/status", {state: {groupData: group}}); 
         }
     }
+
+    const handleDeleteGroup = (groupID) => {
+      Axios.delete(`${process.env.REACT_APP_API_URL}/groupMembers/${groupID}`)
+        .then(() => {
+          window.location.reload(); 
+        })
+        .catch(err => console.log(err.message));
+    };
+    
     return (
         <div className={styles["groups-container"]}>
             <h1>Your Groups</h1>
@@ -54,6 +63,16 @@ const GroupsPage = () => {
                       onClick={() => handleInitiatePaymentSplit(cg)}>
                         <h4>{cg.groupname}</h4>
                         <p>Role: {(cg.leaderid === userId) ? "leader" : "member"}</p>
+                        {cg.leaderid === userId && (
+                          <button 
+                            className={styles["delete-button"]} 
+                            onClick={(e) => {
+                              e.stopPropagation(); // Prevent onClick of parent div
+                              handleDeleteGroup(cg.groupid);
+                            }}>
+                            Delete
+                          </button>
+                        )}
                     </div>
                 ))}
             </div>
