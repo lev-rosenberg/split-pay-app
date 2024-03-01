@@ -44,7 +44,7 @@ const GroupsPage = () => {
     }
 
     const handleDeleteGroup = (groupID) => {
-      Axios.delete(`${process.env.REACT_APP_API_URL}/groupMembers/${groupID}`)
+      Axios.delete(`${process.env.REACT_APP_API_URL}/groupMembers/deleteBoth/${groupID}`)
         .then(() => {
           window.location.reload(); 
         })

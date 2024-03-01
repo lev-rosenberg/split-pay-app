@@ -61,20 +61,20 @@ router.put('/:id', (req, res) => {
     }); 
 });
 
-// router.delete('/:id', (req, res) => {
-//   const groupID = req.params.id;
-//   const deleteQuery = `DELETE FROM GroupMembers WHERE groupid = $1`;
-//   pool.query(deleteQuery, [groupID], (err, result) => {
-//       if (err) {
-//           console.log(err.message);
-//           res.status(400).send('Error deleting group members');
-//       } else {
-//           res.status(200).json({ message: 'Group members deleted successfully' });
-//       }
-//   });
-// });
-
 router.delete('/:id', (req, res) => {
+  const groupID = req.params.id;
+  const deleteQuery = `DELETE FROM GroupMembers WHERE groupid = $1`;
+  pool.query(deleteQuery, [groupID], (err, result) => {
+      if (err) {
+          console.log(err.message);
+          res.status(400).send('Error deleting group members');
+      } else {
+          res.status(200).json({ message: 'Group members deleted successfully' });
+      }
+  });
+});
+
+router.delete('/deleteBoth/:id', (req, res) => {
     const groupID = req.params.id;
   
     pool.query('BEGIN', async (err) => {
