@@ -34,7 +34,7 @@ app.use(express.json());
 app.use(cors({
   origin: 'http://localhost:3000, https://split-pay.onrender.com',
 })); 
-//let userRouter defined handler methods handle all API requests coming to '/users'!
+
 app.use('/users', usersRouter); 
 app.use('/groups', groupsRouter); 
 app.use('/groupMembers', groupMembersRouter); 
