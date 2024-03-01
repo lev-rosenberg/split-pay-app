@@ -31,7 +31,7 @@ const StatusPage = () => {
     const totalowed = groupMembers.reduce((prev, cur) => prev + cur.amountowed, 0);
     const hasEveryoneAcceptedTerms = groupMembers.reduce((prev, cur) => prev & cur.hasacceptedterms, true); 
     const fetchGroupInfo = () => {
-        Axios.get(`http://localhost:8000/groups/${groupid}/users`).then(response => {
+        Axios.get(`${process.env.REACT_APP_API_URL}/groups/${groupid}/users`).then(response => {
             const userData = response.data.users;
             const users = [];
             for (let i = 0; i < userData.length; i++) {
@@ -39,11 +39,11 @@ const StatusPage = () => {
             }
             setGroupMembers(users);
         }).catch(err => console.log(err.message));
-        Axios.get(`http://localhost:8000/groups/${groupid}`).then(response => {
+        Axios.get(`${process.env.REACT_APP_API_URL}/groups/${groupid}`).then(response => {
             const groupData = response.data.group;
             //setHasEveryoneAcceptedTerms(groupData.haseveryoneacceptedterms);
         }).catch(err => console.log(err.message));
-        Axios.get(`http://localhost:8000/users/${userId}`).then(response => {
+        Axios.get(`${process.env.REACT_APP_API_URL}/users/${userId}`).then(response => {
             const userData = response.data.user;
             setUserData(userData);
         }).catch(err => console.log(err.message));
@@ -63,7 +63,7 @@ const StatusPage = () => {
         try {
             const newGroup = {leaderID: leaderid, groupName: groupname, hasEveryoneAcceptedTerms: hasEveryoneAcceptedTerms, totalOwed: totalowed, isCurrent: true}; 
             //wait for DB update to update group's state to active group! 
-            await Axios.put(`http://localhost:8000/groups/${groupid}`, newGroup); 
+            await Axios.put(`${process.env.REACT_APP_API_URL}/groups/${groupid}`, newGroup); 
             window.alert(`Group ${groupname} is now active!`);
             navigate("/groups"); 
         } catch(err){
@@ -88,7 +88,7 @@ const StatusPage = () => {
     const handlePaymentSubmit = async () =>{
         setIsModalOpen(!isModalOpen);
         const updatedGroup = {leaderID: leaderid, groupName: groupname, hasEveryoneAcceptedTerms: hasEveryoneAcceptedTerms, totalOwed: totalowed, isCurrent: false}; 
-        await Axios.put(`http://localhost:8000/groups/${groupid}`,updatedGroup); 
+        await Axios.put(`${process.env.REACT_APP_API_URL}/groups/${groupid}`,updatedGroup); 
         window.alert("Payment submitted!"); 
     } 
     const rotateStyle = {

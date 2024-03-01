@@ -28,7 +28,7 @@ const ProfilePage = () => {
 
 
     useEffect(() => {
-        Axios.get(`http://localhost:8000/users/${userId}`).then(response => {
+        Axios.get(`${process.env.REACT_APP_API_URL}/users/${userId}`).then(response => {
             const userData = response.data.user;
             setUserData(userData);
             setEditableUserData(userData); 
@@ -37,7 +37,7 @@ const ProfilePage = () => {
     const toggleEditSaveHandler = () => {
     if (isEditing) {
         console.log(`save profile called`);
-        Axios.put(`http://localhost:8000/users/${userId}`, {
+        Axios.put(`${process.env.REACT_APP_API_URL}/users/${userId}`, {
             userName: editableUserData.username, 
             email: editableUserData.email,
         })

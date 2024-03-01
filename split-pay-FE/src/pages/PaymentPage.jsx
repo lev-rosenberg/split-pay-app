@@ -20,7 +20,7 @@ function PaymentPage() {
     const [customAmounts, setCustomAmounts] = useState({});
     const groupData = loc.state && loc.state.groupData; 
     useEffect(() => {
-      Axios.get(`http://localhost:8000/groups/${groupData.groupid}/users`).then(response => {
+      Axios.get(`${process.env.REACT_APP_API_URL}/groups/${groupData.groupid}/users`).then(response => {
         const userData = response.data.users;
         const users = [];
         for (let i = 0; i < userData.length; i++) {
@@ -50,11 +50,11 @@ function PaymentPage() {
           const {userid} = groupMembers[i];
           const amountOwed = formFields["strategy"] === "equal" ? equalAmount : customAmounts[userid];
           const groupMember = {groupID: groupData.groupid, isLeader: true, hasAcceptedTerms: false, amountOwed: amountOwed};
-          dbUpdatePromises.push(Axios.put(`http://localhost:8000/groupMembers/${userid}`, groupMember))
+          dbUpdatePromises.push(Axios.put(`${process.env.REACT_APP_API_URL}/groupMembers/${userid}`, groupMember))
         }
         const {groupid, leaderid, groupname, iscurrent} = groupData;
         const group = {leaderID: leaderid, groupName: groupname, hasEveryoneAcceptedTerms: false, totalOwed: formFields["amount"], isCurrent: iscurrent};
-        dbUpdatePromises.push(Axios.put(`http://localhost:8000/groups/${groupid}`, group));
+        dbUpdatePromises.push(Axios.put(`${process.env.REACT_APP_API_URL}/groups/${groupid}`, group));
         //wait for all db updates to go through! 
         await Promise.all(dbUpdatePromises); 
         const ws = new WebSocket('ws://localhost:8000')

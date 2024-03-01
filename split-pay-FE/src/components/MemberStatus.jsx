@@ -11,7 +11,7 @@ const MemberStatus = ({member, groupid}) => {
     async function handleChangeAgreed() {
       try{
         const user = {groupID: groupid, isLeader: isleader, hasAcceptedTerms: !hasacceptedterms, amountOwed: amountowed};
-        await Axios.put(`http://localhost:8000/groupMembers/${userid}`, user).then(response => {}).catch(err => console.log(err.message));
+        await Axios.put(`${process.env.REACT_APP_API_URL}/groupMembers/${userid}`, user).then(response => {}).catch(err => console.log(err.message));
         //open up web-socket connection! 
         const ws = new WebSocket("ws://localhost:8000"); 
         ws.onopen = () => {

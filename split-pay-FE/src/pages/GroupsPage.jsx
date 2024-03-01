@@ -12,7 +12,7 @@ const GroupsPage = () => {
     const { userId }  = state ;
     //get all groups from server!
     useEffect(() => {
-      Axios.get(`http://localhost:8000/users/${userId}/groups`).then(response => {
+      Axios.get(`${process.env.REACT_APP_API_URL}/users/${userId}/groups`).then(response => {
         const groupsData = response.data.groups;
         const curGroups = [];
         const allGroups = [];

@@ -38,7 +38,7 @@ function App() {
       userName: name,
       email: email
     };
-    Axios.post("http://localhost:8000/users", body)
+    Axios.post(`${process.env.REACT_APP_API_URL}/users`, body)
       .then(response => {
         dispatch({ type: "SET_USER_ID", payload: sub });
         dispatch({ type: "SET_SIGNED_IN", payload: true });
