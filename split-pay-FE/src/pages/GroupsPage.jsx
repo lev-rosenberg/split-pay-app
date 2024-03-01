@@ -1,11 +1,10 @@
 import {useState, useEffect, useContext} from "react"; 
 import { Context } from "../contexts/userContext";
-import { useNavigate } from "react-router-dom";
 import Axios from "axios";
+import GroupCard from "../components/GroupCard";
 import styles from "../module-styles/GroupsPage.module.css"; 
 
 const GroupsPage = () => {
-    const navigate = useNavigate(); 
     const [curGroups, setCurGroups] = useState([]); 
     const [prevGroups, setPreviousGroups] = useState([]); 
     const { state } = useContext(Context);
@@ -28,28 +27,6 @@ const GroupsPage = () => {
         setPreviousGroups(allGroups);
       }).catch(err => console.log(err.message));
     }, [userId]); 
-
-    //function that is called when button  click happens => initiates payment split for the pertained group! 
-    const handleInitiatePaymentSplit = (group) => {
-        const {leaderid}=group; 
-        //if user clicked on group for which they are leader, transition to 
-        if(leaderid === userId && group.iscurrent){
-           //switch route to status to show in real-time status page for this specific group! 
-           navigate("/payment", {state: {groupData: group}}); 
-        } 
-        //otherwise, it's a member clicking group! 
-        else {
-          navigate("/status", {state: {groupData: group}}); 
-        }
-    }
-
-    const handleDeleteGroup = (groupID) => {
-      Axios.delete(`${process.env.REACT_APP_API_URL}/groupMembers/deleteBoth/${groupID}`)
-        .then(() => {
-          window.location.reload(); 
-        })
-        .catch(err => console.log(err.message));
-    };
     
     return (
         <div className={styles["groups-container"]}>
@@ -57,35 +34,13 @@ const GroupsPage = () => {
             <h5>Current Groups:</h5>
             <div className={styles["groups-list"]}>
                 {curGroups.map((cg, idx) => (
-                    <div 
-                      key = {'c' + idx} 
-                      className={styles["group-card"]}
-                      onClick={() => handleInitiatePaymentSplit(cg)}>
-                        <h4>{cg.groupname}</h4>
-                        <p>Role: {(cg.leaderid === userId) ? "leader" : "member"}</p>
-                        {cg.leaderid === userId && (
-                          <button 
-                            className={styles["delete-button"]} 
-                            onClick={(e) => {
-                              e.stopPropagation(); // Prevent onClick of parent div
-                              handleDeleteGroup(cg.groupid);
-                            }}>
-                            Delete
-                          </button>
-                        )}
-                    </div>
+                  <GroupCard group={cg} idx={idx} />
                 ))}
             </div>
             <h5>Previous Groups:</h5>
             <div className={styles["groups-list"]}>
                 {prevGroups.map((ag, idx) => (
-                  <div 
-                    key = {'a' + idx} 
-                    className={styles["group-card"]}
-                    onClick={() => handleInitiatePaymentSplit(ag)}>
-                      <h4>{ag.groupname}</h4>
-                      <p>Role: {(ag.leaderid === userId) ? "leader" : "member"}</p>
-                  </div>
+                  <GroupCard group={ag} idx={idx} />
                 ))}
             </div>
         </div>
