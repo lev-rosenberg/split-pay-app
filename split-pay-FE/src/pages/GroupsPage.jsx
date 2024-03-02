@@ -31,16 +31,16 @@ const GroupsPage = () => {
     return (
         <div className={styles["groups-container"]}>
             <h1>Your Groups</h1>
-            <h5>Current Groups:</h5>
+            <h3>Current Groups:</h3>
             <div className={styles["groups-list"]}>
                 {curGroups.map((cg, idx) => (
-                  <GroupCard group={cg} idx={idx} />
+                  <GroupCard key = {'c' + idx} group={cg} idx={idx} />
                 ))}
             </div>
-            <h5>Previous Groups:</h5>
+            <h3>Past Groups:</h3>
             <div className={styles["groups-list"]}>
                 {prevGroups.map((ag, idx) => (
-                  <GroupCard group={ag} idx={idx} />
+                  <GroupCard key = {'p' + idx} group={ag} idx={idx} />
                 ))}
             </div>
         </div>

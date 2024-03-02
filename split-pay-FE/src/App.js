@@ -53,7 +53,7 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/groups" element={<GroupsPage />} />
+            <Route path="/groups-page" element={<GroupsPage />} />
             <Route path="/payment" element={<PaymentPage />} />
             <Route path="/status" element={<StatusPage />} />
             <Route path="/join/:groupID" element={<JoinPage />} />

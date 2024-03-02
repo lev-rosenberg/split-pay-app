@@ -65,7 +65,7 @@ const StatusPage = () => {
             //wait for DB update to update group's state to active group! 
             await Axios.put(`${process.env.REACT_APP_API_URL}/groups/${groupid}`, newGroup); 
             window.alert(`Group ${groupname} is now active!`);
-            navigate("/groups"); 
+            navigate("/groups-page"); 
         } catch(err){
             console.log(`Failed to update group to be active again!`); 
         }

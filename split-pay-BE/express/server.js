@@ -3,6 +3,7 @@ const http = require('http');
 const cors = require('cors');
 const WebSocket = require('ws'); 
 const pool = require('./pool.js');
+
 const usersRouter = require('./rest-API-routers/user-requests.js'); 
 const groupsRouter = require('./rest-API-routers/group-requests.js')
 const groupMembersRouter= require('./rest-API-routers/group-members-requests.js');
@@ -30,10 +31,9 @@ wss.on('connection', (ws) => {
   ws.send(JSON.stringify({event: 'connected', message: "Websocket conn established..."})); 
 }); 
 app.use(express.json());
-// app.use(cors())
 app.use(cors({
-  origin: 'http://localhost:3000, https://split-pay.onrender.com',
-})); 
+  origin: "*",
+  }))
 
 app.use('/users', usersRouter); 
 app.use('/groups', groupsRouter); 

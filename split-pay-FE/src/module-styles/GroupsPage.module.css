@@ -1,31 +1,24 @@
 .groups-container {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
   width: 100%;
-  align-items: center;
+  align-items: flex-start;
 }
-
-.groups-container h1 {
-    font-weight: 450;
-    border-bottom: 3px solid black;
-    align-self: center;
-}
-
-.groups-container h5 {
-    font-weight: 400;
-    font-size: large;
-    text-align: center;
-}
-
-.groups-container .group-card {
+.group-card {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem;
-    background-color: #B6A9D0; 
+    padding: 1.5rem;
     border-radius: 5px;
-    border: 1px solid black;
+    border: 0.5px solid rgba(var(--background-grey, 0.5));
+    box-shadow: 0 0 5px 0 rgba(var(--background-grey, 0.5));
+    transition: all 0.2s;
+}
+
+.group-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 .groups-container button:hover {
     background-color: #E2DDEC;

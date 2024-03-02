@@ -1,9 +1,8 @@
-import styles from "../module-styles/Header.module.css"; 
 const Header = () => {
     return (
-        <div className={styles["header-container"]}>
+        <header>
             <h3>SplitHelper</h3>
-        </div>
+        </header>
     ); 
 };
 

@@ -37,7 +37,7 @@
     text-align: left;
 }
 
-button:hover {
+.profile-wrapper button:hover {
     background-color: #725C9C; 
     transition: background-color 0.3s;
 }

@@ -38,7 +38,7 @@ const HomePage = () => {
         setGroupLink('http://localhost:3000/join/' + groupID); 
     }
     const handleCopyLink = (linkURL) => {
-        navigator.clipboard.writeText(linkURL).then(()=> {}).catch(err => console.log(err.message)); 
+        navigator.clipboard.writeText(linkURL); 
         window.alert("successfully copied to your clipboard"); 
     }
     return (
@@ -46,7 +46,7 @@ const HomePage = () => {
             <h1>Create a Group</h1>
             <div className={styles["input-container"]}>
                 <label htmlFor="group-name">New Group Name:</label>
-                <input name="group-name" placeholder="Enter your group here!" type="text" onChange={(e) => setGroupName(e.target.value)}></input>
+                <input name="group-name" placeholder="Your Group" type="text" onChange={(e) => setGroupName(e.target.value)}></input>
             </div>
             {groupName.length > 0 && <button type="button" onClick={handleCreateGroup}>Create Group</button>}
             {isCreated && (
