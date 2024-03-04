@@ -28,6 +28,7 @@ const MemberStatus = ({member, groupid}) => {
     
     return (<div className={styles["member-status-wrapper"]}>
         <div className={styles["left"]}>
+          <div className={styles["icon"]}>
           {userid === state.userId ? 
               <button onClick={handleChangeAgreed}>
                 {hasacceptedterms ? <CheckIcon /> : <CloseIcon />} 
@@ -35,6 +36,7 @@ const MemberStatus = ({member, groupid}) => {
               : 
               hasacceptedterms ? <CheckIcon /> : <CloseIcon />
           }
+          </div>
           <p>{username}</p>
         </div>
         <p>${amountowed}</p>

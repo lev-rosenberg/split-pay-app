@@ -103,16 +103,18 @@ const StatusPage = () => {
 
     return (
         <div className={styles["status-wrapper"]}>
-            <h3>Status of {groupname}</h3>
-            <span>Amount Owed</span>
+            <h1>Status of {groupname}</h1>
+            <h3>Amount Owed</h3>
             <div className={styles["members-status"]}>
                 {groupMembers.map((gm, idx) => <MemberStatus key={idx} member={gm} groupid = {groupid}/> )}
             </div>
             <div className={styles["total-owed"]}>
-                <p>Total Owed: ${totalowed} </p>
+                <p>Total: ${totalowed} </p>
             </div>
-            {(iscurrent && isLeader && hasEveryoneAcceptedTerms) ? <button type="button" onClick={handlePaymentSubmit}>Finish Pay</button> : null} 
-            {!iscurrent && <button onClick={handleActiveChange}>Make Group Active!</button>}
+            <div className={styles["leader-btns"]}>
+              {(iscurrent && isLeader && hasEveryoneAcceptedTerms) ? <button type="button" onClick={handlePaymentSubmit}>Finish Pay</button> : null} 
+              {!iscurrent && <button onClick={handleActiveChange}>Make Group Active!</button>}
+            </div>
             <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(prev => !prev)}>
                 {cardInfo && <CreditCard cardInfo={cardInfo} />}
                 {/* <img style={rotateStyle}src={CreditCardImage} alt="Credit Card for NFC Payment" />      */}

@@ -8,6 +8,17 @@
 .member-status-wrapper .left {
     display: flex;
     align-items: center;
+    gap: 0.5rem;
 }
+.member-status-wrapper .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    width: 3rem;
+}
+
 .member-status-wrapper p {
+    color: #000;
 }
