@@ -31,8 +31,8 @@ wss.on('connection', (ws) => {
   });
   ws.send(JSON.stringify({event: 'connected', message: "Websocket conn established..."})); 
 }); 
-app.use(express.json());
-// app.use(express.static(path.join(__dirname, 'split-pay-FE/build')));
+// app.use(express.json());
+app.use(express.static(path.join(__dirname, 'split-pay-FE/build')));
 
 app.use(cors({
   origin: "*",
