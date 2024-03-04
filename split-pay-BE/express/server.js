@@ -3,6 +3,7 @@ const http = require('http');
 const cors = require('cors');
 const WebSocket = require('ws'); 
 const pool = require('./pool.js');
+const path = require('path');
 
 const usersRouter = require('./rest-API-routers/user-requests.js'); 
 const groupsRouter = require('./rest-API-routers/group-requests.js')
@@ -31,6 +32,8 @@ wss.on('connection', (ws) => {
   ws.send(JSON.stringify({event: 'connected', message: "Websocket conn established..."})); 
 }); 
 app.use(express.json());
+// app.use(express.static(path.join(__dirname, 'split-pay-FE/build')));
+
 app.use(cors({
   origin: "*",
   }))
@@ -38,6 +41,10 @@ app.use(cors({
 app.use('/users', usersRouter); 
 app.use('/groups', groupsRouter); 
 app.use('/groupMembers', groupMembersRouter); 
+
+app.get('*', (req,res) =>{
+  res.sendFile(path.join(__dirname+'/split-pay-FE/build/index.html'));
+});
 
 httpServer.listen(port, () => {
   console.log(`server started...`); 
